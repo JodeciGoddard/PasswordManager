@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Image display in background in select state -->
+    <!-- Image display in background in select state -->
+    <!-- Default state -->
+
+
+    <item android:state_pressed="true" android:drawable="@drawable/ic_delete_black_18dp" />
+    <item android:state_focused="true" android:drawable="@drawable/ic_delete_white_18dp" />
+    <item android:drawable="@drawable/ic_delete_white_18dp" />
+</selector>

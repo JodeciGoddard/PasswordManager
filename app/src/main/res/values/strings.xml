@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Lock and Key</string>
+    <string name="title_activity_profile_view">Home</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_register">Register New User</string>
+</resources>
