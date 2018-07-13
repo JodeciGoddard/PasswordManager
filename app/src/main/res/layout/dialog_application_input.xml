@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:ems="10"
-        android:hint="Anplication Name"
+        android:hint="Application Name"
         android:inputType="textPersonName" />
 
     <EditText
