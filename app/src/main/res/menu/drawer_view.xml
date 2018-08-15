@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_import"
             android:icon="@drawable/user_icon"
             android:title="Import" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_export"
             android:icon="@drawable/user_icon"
-            android:title="Gallery" />
+            android:title="Export" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/user_icon"

@@ -16,10 +16,11 @@ public class Entry {
         this._applicationName = applicationName;
         this._appUsername = appUsername;
         this._appPassword = appPassword;
+        cleanseInput();
     }
 
     private String escapeMetaCharacters(String inputString){
-        final String[] metaCharacters = {"\\","\0","\'","\"","*","\b","\n","\r","\t","%","_"};
+        final String[] metaCharacters = {"\\","\0","\'","\"","*","\b","\n","\r","\t","%","_","{","}"};
         String outputString="";
         for (int i = 0 ; i < metaCharacters.length ; i++){
             if(inputString.contains(metaCharacters[i])){
@@ -30,27 +31,48 @@ public class Entry {
         return inputString;
     }
 
-    public void cleanseInput(){
+    private void cleanseInput(){
         _applicationName = escapeMetaCharacters(_applicationName);
         _appUsername = escapeMetaCharacters(_appUsername);
         _appPassword = escapeMetaCharacters(_appPassword);
     }
+
+    //removes the backslashed
+    public static String uncleanseInput(String input){
+        final String[] unclean = {"\\","\0","\'","\"","*","\b","\n","\r","\t","%","_","{","}"};
+        final String[] clean = {"\\\\","\\\0","\\\'","\\\"","\\*","\\\b","\\\n","\\\r","\\\t","\\%","\\_","\\{","\\}"};
+        String output = "";
+        for (int i = 0; i < clean.length; i++){
+            if(input.contains(clean[i])){
+                output = input.replace(clean[i], unclean[i]);
+                input = output;
+            }
+        }
+        return input;
+    }
+
 
     public int get_id() {
         return _id;
     }
 
     public String get_applicationName() {
-        return _applicationName;
+        return uncleanseInput(_applicationName);
     }
 
     public String get_appUsername() {
-        return _appUsername;
+        return uncleanseInput(_appUsername);
     }
 
     public String get_appPassword() {
-        return _appPassword;
+        return uncleanseInput(_appPassword);
     }
+
+    public String getUncleanAppName() {return _applicationName;}
+
+    public String getUncleanUsername() {return _appUsername;}
+
+    public String getUncleanPass() {return  _appPassword;}
 
     public void set_id(int _id) {
         this._id = _id;
