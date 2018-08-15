@@ -69,14 +69,16 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     //add row to entries
-    public void addEntry(Entry entry, String tablename){
+    public long addEntry(Entry entry, String tablename){
+        long rowid;
         ContentValues values = new ContentValues();
         values.put(COLUMN_APPNAME, entry.get_applicationName());
         values.put(COLUMN_USERNAME, entry.get_appUsername());
         values.put(COLUMN_PASSWORD, entry.get_appPassword());
         SQLiteDatabase db = getWritableDatabase();
-        db.insert(tablename + TABLE_ENTRIES, null, values);
+        rowid = db.insert(tablename + TABLE_ENTRIES, null, values);
         db.close();
+        return rowid;
     }
 
     public void deleteUser(int id, String tablename){
@@ -168,6 +170,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         c.close();
         return e;
     }
+
 
     public void printdblogEntries(String tablename){
         String log = "";

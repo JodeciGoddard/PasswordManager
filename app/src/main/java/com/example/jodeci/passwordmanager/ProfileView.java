@@ -132,13 +132,13 @@ public class ProfileView extends AppCompatActivity {
                         if ( !appname.trim().equals("") && !user.trim().equals("")&& !pass.trim().equals("")){
                             final Entry entry = new Entry(appname,user, pass);
 
-                            int id = Preferences.getNewID(username, ProfileView.this);
-                            Preferences.incremnetID(username, ProfileView.this);
+                           // int id = Preferences.getNewID(username, ProfileView.this);
+                           // Preferences.incremnetID(username, ProfileView.this);
 
-                            entry.set_id(id);
-
-                            dbHandler.addEntry(entry, username);
+                            long id = dbHandler.addEntry(entry, username);
                             dbHandler.printdblogEntries(username);
+
+                            entry.set_id((int) id);
 
                             adapter.add(entry);
                             diag.cancel();
@@ -185,7 +185,8 @@ public class ProfileView extends AppCompatActivity {
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
                         final Entry e = (Entry) v.getTag();
-                        adapter.remove(e);
+                        Log.i("DELETE: ", "view id: " + e.get_id());
+                        adapter.remove(e); //--make sure the correct id is given
                         setDefaultText();
 
 
