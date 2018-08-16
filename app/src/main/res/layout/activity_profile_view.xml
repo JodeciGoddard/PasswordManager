@@ -11,40 +11,56 @@
     tools:context="com.example.jodeci.passwordmanager.ProfileView">
 
     <!-- Layout to contain contents of main body of screen (drawer will slide over this) -->
-    <FrameLayout
-        android:id="@+id/content_frame"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btnFloat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:clickable="true"
-            app:backgroundTint="@color/colorPrimaryDark"
-            app:fabSize="normal"
-            app:rippleColor="@android:color/darker_gray"
-            app:srcCompat="@drawable/ic_add_white_24dp" />
-
-        <ListView
-            android:id="@+id/Entries"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_color" />
+            android:layout_height="?actionBarSize"
+            android:layout_alignParentTop="true"
+            android:layout_weight="1"
+            android:background="?attr/colorPrimary" />/>
 
-        <TextView
-            android:id="@+id/lblEmpty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text='Add Items Using "Plus" button'
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/btnFloat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:clickable="true"
+                app:backgroundTint="@color/colorPrimaryDark"
+                app:fabSize="normal"
+                app:rippleColor="@android:color/darker_gray"
+                app:srcCompat="@drawable/ic_add_white_24dp" />
+
+            <ListView
+                android:id="@+id/Entries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_color" />
+
+            <TextView
+                android:id="@+id/lblEmpty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text='Add Items Using "Plus" button'
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+        </FrameLayout>
+    </LinearLayout>
 
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
     <android.support.design.widget.NavigationView

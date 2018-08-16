@@ -19,10 +19,12 @@
         </activity>
         <activity
             android:name=".RegisterScreen"
-            android:label="@string/title_register"/>
+            android:label="@string/title_register">
+        </activity>
         <activity
             android:name=".ProfileView"
-            android:label="@string/title_activity_profile_view"></activity>
+            android:label="@string/title_activity_profile_view">
+        </activity>
     </application>
 
     <uses-permission
