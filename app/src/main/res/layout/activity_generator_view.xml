@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.jodeci.passwordmanager.GeneratorView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusedByDefault="false"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/generator_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="?attr/colorPrimary" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2">
+
+            <Switch
+                android:id="@+id/swtch_chars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:checked="true"
+                android:paddingLeft="10dp"
+                android:text="Number of Characters"
+                android:thumbTint="@color/colorPrimary" />
+
+            <SeekBar
+                android:id="@+id/bar_chars"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="6"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:max="10"
+                android:progress="1"
+                android:progressTint="@color/colorPrimary"
+                android:thumbTint="@color/colorPrimaryDark" />
+
+            <Switch
+                android:id="@+id/swtch_caps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:checked="true"
+                android:paddingLeft="10dp"
+                android:text="Number of Capitals"
+                android:thumbTint="@color/colorPrimary" />
+
+            <SeekBar
+                android:id="@+id/bar_caps"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:max="5"
+                android:progress="1"
+                android:progressTint="@color/colorPrimary"
+                android:thumbTint="@color/colorPrimaryDark" />
+
+            <Switch
+                android:id="@+id/swtch_lower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:checked="true"
+                android:paddingLeft="10dp"
+                android:text="Number of Lower Case"
+                android:thumbTint="@color/colorPrimary" />
+
+            <SeekBar
+                android:id="@+id/bar_lower"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:max="5"
+                android:progress="1"
+                android:progressTint="@color/colorPrimary"
+                android:thumbTint="@color/colorPrimaryDark" />
+
+            <Switch
+                android:id="@+id/swtch_symbols"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:checked="true"
+                android:paddingLeft="10dp"
+                android:text="Number of Symbols"
+                android:thumbTint="@color/colorPrimary" />
+
+            <SeekBar
+                android:id="@+id/bar_symbols"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:max="5"
+                android:progress="1"
+                android:progressTint="@color/colorPrimary"
+                android:thumbTint="@color/colorPrimaryDark" />
+
+            <Switch
+                android:id="@+id/swtch_numbers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="15dp"
+                android:checked="true"
+                android:paddingLeft="10dp"
+                android:text="Number of Numbers"
+                android:thumbTint="@color/colorPrimary" />
+
+            <SeekBar
+                android:id="@+id/bar_numbers"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:max="5"
+                android:progress="1"
+                android:progressTint="@color/colorPrimary"
+                android:thumbTint="@color/colorPrimaryDark" />
+
+        </GridLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/lblPhrase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:paddingLeft="15dp"
+                android:text="Included Phrase"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/txtPhrase"
+                style="@style/Widget.AppCompat.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="4"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:ems="3"
+                android:focusedByDefault="false"
+                android:focusableInTouchMode="true"
+                android:inputType="textPersonName"
+                android:textColorHighlight="@android:color/black"
+                android:textColorLink="@android:color/black" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnGenerate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/button_states"
+            android:text="Generate"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

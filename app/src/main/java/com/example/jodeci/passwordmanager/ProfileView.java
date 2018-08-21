@@ -97,6 +97,9 @@ public class ProfileView extends AppCompatActivity {
                             Log.i("Profile: ", "Menu item import selected");
                         } else if(menuItem.getItemId() == R.id.nav_import){
                             performFileSearch();
+                        } else if (menuItem.getItemId() == R.id.nav_passwordGen){
+                            Intent intent = new Intent(ProfileView.this, GeneratorView.class);
+                            startActivity(intent);
                         }
 
                         //Log.i("Profile: ", "Something was tapped");
