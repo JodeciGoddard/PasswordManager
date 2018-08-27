@@ -171,6 +171,17 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return e;
     }
 
+    public void updateEntry(Entry e, String tablename){
+        String id = "" + e.get_id();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_APPNAME, e.get_applicationName());
+        values.put(COLUMN_USERNAME, e.get_appUsername());
+        values.put(COLUMN_PASSWORD, e.get_appPassword());
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(tablename + TABLE_ENTRIES, values, "_id = ?", new String[]{id});
+        db.close();
+    }
+
 
     public void printdblogEntries(String tablename){
         String log = "";

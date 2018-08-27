@@ -46,6 +46,16 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
         }
     }
 
+    public void updateEntry(Entry e){
+        for (Entry p : entries) {
+            if(p.get_id() == e.get_id() ){
+                p.set_applicationName(e.get_applicationName());
+                p.set_appUsername(e.get_appUsername());
+                p.set_appPassword(e.get_appPassword());
+            }
+        }
+    }
+
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 

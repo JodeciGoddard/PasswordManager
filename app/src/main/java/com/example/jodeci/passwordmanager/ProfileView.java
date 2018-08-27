@@ -136,8 +136,8 @@ public class ProfileView extends AppCompatActivity {
                         if ( !appname.trim().equals("") && !user.trim().equals("")&& !pass.trim().equals("")){
                             final Entry entry = new Entry(appname,user, pass);
 
-                           // int id = Preferences.getNewID(username, ProfileView.this);
-                           // Preferences.incremnetID(username, ProfileView.this);
+                            // int id = Preferences.getNewID(username, ProfileView.this);
+                            // Preferences.incremnetID(username, ProfileView.this);
 
                             long id = dbHandler.addEntry(entry, username);
                             dbHandler.printdblogEntries(username);
@@ -208,6 +208,54 @@ public class ProfileView extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure, you wish to delete?").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
+    }
+
+    public void editEntry(final View v){
+        final Entry e = (Entry) v.getTag();
+        AlertDialog.Builder mBuiler = new AlertDialog.Builder(ProfileView.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_edit_item, null);
+        final EditText editApp = (EditText) mView.findViewById(R.id.txtEditAppName);
+        final EditText editPass = (EditText) mView.findViewById(R.id.txtEditPassword);
+        final EditText editUser = (EditText) mView.findViewById(R.id.txtEditUsername);
+        final Button save = (Button) mView.findViewById(R.id.btnEditSave);
+
+        editApp.setText(e.get_applicationName());
+        editPass.setText(e.get_appPassword());
+        editUser.setText(e.get_applicationName());
+
+        mBuiler.setView(mView);
+        final AlertDialog diag = mBuiler.create();
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String appname, user, pass;
+                appname = editApp.getText().toString();
+                user = editUser.getText().toString();
+                pass = editPass.getText().toString();
+                if ( !appname.trim().equals("") && !user.trim().equals("")&& !pass.trim().equals("")){
+                    final Entry entry = e;
+                    e.set_applicationName(appname);
+                    e.set_appPassword(pass);
+                    e.set_appUsername(user);
+
+                   //update entry in the database;
+                    dbHandler.updateEntry(entry, username);
+
+                    //update the list of entries
+                    adapter.updateEntry(entry);
+                    diag.cancel();
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(ProfileView.this,"Change saved",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ProfileView.this,"Please fill all fields",Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+
+            diag.show();
     }
 
     /**

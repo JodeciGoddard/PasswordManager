@@ -81,6 +81,7 @@
         android:layout_marginRight="8dp"
         android:background="@android:color/transparent"
         android:src="@drawable/edit_button_states"
+        android:onClick="editEntry"
         app:layout_anchor="@+id/linearLayout"
         app:layout_anchorGravity="right|bottom"
         app:layout_constraintBottom_toBottomOf="parent"
