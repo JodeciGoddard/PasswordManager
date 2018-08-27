@@ -1,7 +1,9 @@
 package com.example.jodeci.passwordmanager;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -36,6 +38,12 @@ public class GeneratorView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generator_view);
         initWidgets();
+
+        //ToolBar setup
+        Toolbar toolbar = (Toolbar) findViewById(R.id.generator_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         btnGenerate = (Button) findViewById(R.id.btnGenerate);
 

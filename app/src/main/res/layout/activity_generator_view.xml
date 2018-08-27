@@ -31,7 +31,7 @@
                 android:layout_marginTop="15dp"
                 android:checked="true"
                 android:paddingLeft="10dp"
-                android:text="Number of Characters"
+                android:text="@string/number_of_characters"
                 android:thumbTint="@color/colorPrimary" />
 
             <SeekBar
@@ -42,7 +42,8 @@
                 android:layout_columnWeight="6"
                 android:layout_margin="5dp"
                 android:layout_marginTop="15dp"
-                android:max="10"
+                android:max="13"
+                android:min="4"
                 android:progress="1"
                 android:progressTint="@color/colorPrimary"
                 android:thumbTint="@color/colorPrimaryDark" />
@@ -81,7 +82,7 @@
                 android:layout_marginTop="15dp"
                 android:checked="true"
                 android:paddingLeft="10dp"
-                android:text="Number of Lower Case"
+                android:text="@string/number_of_lower_case"
                 android:thumbTint="@color/colorPrimary" />
 
             <SeekBar
@@ -106,7 +107,7 @@
                 android:layout_marginTop="15dp"
                 android:checked="true"
                 android:paddingLeft="10dp"
-                android:text="Number of Symbols"
+                android:text="@string/number_of_symbols"
                 android:thumbTint="@color/colorPrimary" />
 
             <SeekBar
@@ -132,7 +133,7 @@
                 android:layout_marginTop="15dp"
                 android:checked="true"
                 android:paddingLeft="10dp"
-                android:text="Number of Numbers"
+                android:text="@string/number_of_numbers"
                 android:thumbTint="@color/colorPrimary" />
 
             <SeekBar
@@ -163,7 +164,7 @@
                 android:layout_margin="5dp"
                 android:padding="5dp"
                 android:paddingLeft="15dp"
-                android:text="Included Phrase"
+                android:text="@string/included_phrase"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -190,7 +191,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/button_states"
-            android:text="Generate"
+            android:text="@string/generate"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
@@ -199,8 +200,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal|center"
-            android:text="test"
+            android:text=""
             android:textColor="@android:color/black"
+            android:textIsSelectable="true"
             android:textSize="60sp" />
     </LinearLayout>
 

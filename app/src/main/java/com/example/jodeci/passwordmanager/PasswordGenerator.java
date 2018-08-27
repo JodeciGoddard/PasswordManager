@@ -153,10 +153,10 @@ public class PasswordGenerator {
 
         //construct result
         String result = "";
+        int index;
         ArrayList<String> arrayList = new ArrayList<String>(Arrays.asList(part));
         for (int i=0;i<passwordLen;i++){
-            int index = random.nextInt(arrayList.size());
-            if (index < 0) index = 0;
+            index = random.nextInt(arrayList.size());
             result = result + arrayList.get(index);
             arrayList.remove(index);
         }

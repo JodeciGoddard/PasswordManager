@@ -59,7 +59,9 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
             holder.user = (TextView) convertView.findViewById(R.id.lblDisplay2);
             holder.pass = (TextView) convertView.findViewById(R.id.lblDisplay3);
             holder.deleteEntry = (ImageButton) convertView.findViewById(R.id.btnRubbish);
+            holder.editEntry = (ImageButton) convertView.findViewById(R.id.btnEdit);
             holder.deleteEntry.setTag(holder.myEntry);
+            holder.editEntry.setTag(holder.myEntry);
 
 
             convertView.setTag(holder);
@@ -73,6 +75,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
         holder.pass.setText( entries.get(position).get_appPassword() );
         holder.id = entries.get(position).get_id();
         holder.deleteEntry.setTag(holder.myEntry);
+        holder.editEntry.setTag(holder.myEntry);
 
 
         return convertView;
@@ -81,7 +84,7 @@ public class CustomAdapter extends ArrayAdapter<Entry> {
     public static class ViewHolder {
         Entry myEntry;
         TextView appname, user, pass;
-        ImageButton deleteEntry;
+        ImageButton deleteEntry, editEntry;
         public int id;
     }
 }

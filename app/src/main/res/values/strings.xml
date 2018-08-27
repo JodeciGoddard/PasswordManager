@@ -11,4 +11,14 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="number_of_characters">Number of Characters</string>
+    <string name="number_of_lower_case">Number of Lower Case</string>
+    <string name="number_of_symbols">Number of Symbols</string>
+    <string name="number_of_numbers">Number of Numbers</string>
+    <string name="included_phrase">Included Phrase</string>
+    <string name="generate">Generate</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="add_items_using_plus_button">Add Items Using Plusbutton</string>
 </resources>

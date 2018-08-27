@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +25,7 @@ import static com.example.jodeci.passwordmanager.R.id.errText;
 
 public class LoginScreen extends AppCompatActivity {
 
-    ImageButton newUser;
+    FloatingActionButton newUser;
     Button login;
     EditText username;
     EditText password;
@@ -39,7 +40,7 @@ public class LoginScreen extends AppCompatActivity {
 
         username = (EditText) findViewById(R.id.txtUsername);
         password = (EditText) findViewById(R.id.txtPassword);
-        newUser = (ImageButton) findViewById(R.id.btnRegister);
+        newUser = (FloatingActionButton) findViewById(R.id.btnRegister);
         login = (Button) findViewById(R.id.btnLogin);
         errText = (TextView) findViewById(R.id.lgErr);
 

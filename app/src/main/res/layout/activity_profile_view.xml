@@ -21,13 +21,12 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:layout_alignParentTop="true"
             android:background="?attr/colorPrimary" />
 
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="2">
 
             <android.support.design.widget.FloatingActionButton
@@ -42,7 +41,8 @@
                 app:backgroundTint="@color/colorPrimaryDark"
                 app:fabSize="normal"
                 app:rippleColor="@android:color/darker_gray"
-                app:srcCompat="@drawable/ic_add_white_24dp" />
+                app:srcCompat="@drawable/ic_add_white_24dp"
+                android:focusable="true" />
 
             <ListView
                 android:id="@+id/Entries"
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text='Add Items Using "Plus" button'
+                android:text="@string/add_items_using_plus_button"
                 android:textColor="@color/white"
                 android:textSize="24sp" />
         </FrameLayout>
