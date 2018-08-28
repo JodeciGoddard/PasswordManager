@@ -20,5 +20,5 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="log_in">Log In</string>
-    <string name="add_items_using_plus_button">Add Items Using Plusbutton</string>
+    <string name="add_items_using_plus_button">Add Items Using Plus Button</string>
 </resources>

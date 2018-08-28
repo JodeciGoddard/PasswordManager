@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ public class ProfileView extends AppCompatActivity {
 
         //ToolBar setup
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
@@ -90,13 +92,15 @@ public class ProfileView extends AppCompatActivity {
                                 requestAppPermissions();
                                 String data = convertEntriestoFileFormat(myList);
                                 fm.write(data, "data.txt");
+                                Toast.makeText(ProfileView.this,"File Export successful",Toast.LENGTH_SHORT).show();
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
 
-                            Log.i("Profile: ", "Menu item import selected");
+                            //Log.i("Profile: ", "Menu item import selected");
                         } else if(menuItem.getItemId() == R.id.nav_import){
                             performFileSearch();
+
                         } else if (menuItem.getItemId() == R.id.nav_passwordGen){
                             Intent intent = new Intent(ProfileView.this, GeneratorView.class);
                             startActivity(intent);
@@ -221,7 +225,7 @@ public class ProfileView extends AppCompatActivity {
 
         editApp.setText(e.get_applicationName());
         editPass.setText(e.get_appPassword());
-        editUser.setText(e.get_applicationName());
+        editUser.setText(e.get_appUsername());
 
         mBuiler.setView(mView);
         final AlertDialog diag = mBuiler.create();
@@ -235,9 +239,9 @@ public class ProfileView extends AppCompatActivity {
                 pass = editPass.getText().toString();
                 if ( !appname.trim().equals("") && !user.trim().equals("")&& !pass.trim().equals("")){
                     final Entry entry = e;
-                    e.set_applicationName(appname);
-                    e.set_appPassword(pass);
-                    e.set_appUsername(user);
+                    entry.set_applicationName(appname);
+                    entry.set_appPassword(pass);
+                    entry.set_appUsername(user);
 
                    //update entry in the database;
                     dbHandler.updateEntry(entry, username);
@@ -296,7 +300,7 @@ public class ProfileView extends AppCompatActivity {
             if (resultData != null) {
                 intentUri = resultData.getData();
 
-                String result;
+                final String result;
 
                 result = fm.read(intentUri);
 
@@ -306,12 +310,13 @@ public class ProfileView extends AppCompatActivity {
                 } else {
                     Toast toast = Toast.makeText(getBaseContext(),"Reading Files", Toast.LENGTH_SHORT);
                     Log.i("Read/Write: " , result);
-                    if (addImportsToDatabase(result)){
-                        adapter.notifyDataSetChanged();
-                        Toast.makeText(ProfileView.this,"Reading Files Completed",Toast.LENGTH_SHORT).show();
-                    } else{
-                        Toast.makeText(ProfileView.this,"Reading Files Failed",Toast.LENGTH_SHORT).show();
-                    }
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            addImportsToDatabase(result);
+                        }
+                    });
+                    thread.run();
                 }
             }
         }
@@ -368,6 +373,7 @@ public class ProfileView extends AppCompatActivity {
 
         //make sure its a valid data file
         if (!username.equals(firstline[0])){
+            Toast.makeText(ProfileView.this,"Reading Files Failed",Toast.LENGTH_SHORT).show();
             return  false;
         }
 
@@ -388,13 +394,17 @@ public class ProfileView extends AppCompatActivity {
             //check for close braket
             if(lines[i].equals("}")){
                 Entry e = new Entry(appname,appuser,appPass);
-                dbHandler.addEntry(e, username);
+                long id = dbHandler.addEntry(e, username);
+                e.set_id((int) id);
                 adapter.add(e);
                 continue;
             }
 
         }
 
+        adapter.notifyDataSetChanged();
+        setDefaultText();
+        Toast.makeText(ProfileView.this,"Reading Files Completed",Toast.LENGTH_SHORT).show();
         return true;
     }
 

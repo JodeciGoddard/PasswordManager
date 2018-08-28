@@ -1,5 +1,6 @@
 package com.example.jodeci.passwordmanager;
 
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ public class GeneratorView extends AppCompatActivity {
 
         //ToolBar setup
         Toolbar toolbar = (Toolbar) findViewById(R.id.generator_toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);

@@ -5,6 +5,7 @@
     android:id="@+id/item_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
     android:background="@drawable/button_states"
     tools:layout_editor_absoluteX="10dp"
     tools:layout_editor_absoluteY="25dp">
@@ -45,6 +46,7 @@
             android:layout_marginRight="5dp"
             android:text="TextView"
             android:textColor="@color/white"
+            android:textIsSelectable="true"
             android:textSize="18sp" />
 
         <TextView
@@ -55,6 +57,7 @@
             android:layout_marginRight="5dp"
             android:text="TextView"
             android:textColor="@color/white"
+            android:textIsSelectable="true"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -76,16 +79,15 @@
         android:id="@+id/btnEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/edit_button_states"
         android:onClick="editEntry"
+        android:src="@drawable/edit_button_states"
         app:layout_anchor="@+id/linearLayout"
         app:layout_anchorGravity="right|bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/btnRubbish"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>
