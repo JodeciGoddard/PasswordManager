@@ -24,10 +24,8 @@
         <activity
             android:name=".RegisterScreen"
             android:label="@string/title_register" />
-        <activity
-            android:name=".ProfileView"
-            android:label="@string/title_activity_profile_view" />
-        <activity android:name=".GeneratorView"></activity>
+        <activity android:name=".GeneratorView" />
+        <activity android:name=".ProfileView"></activity>
     </application>
 
 </manifest>

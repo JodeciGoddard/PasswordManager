@@ -2,13 +2,11 @@ package com.example.jodeci.passwordmanager;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -18,24 +16,27 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class ProfileView extends AppCompatActivity {
 
-    private String username;
-    private MyDBHandler dbHandler;
-    private ListView view;
-    private CustomAdapter adapter;
+    public String username;
+    public  MyDBHandler dbHandler;
+    private RecyclerView view;
+    private ProfileAdapter adapter;
     private ArrayList<Entry> myList;
     private DrawerLayout mDrawerLayout;
     private FileManager fm;
@@ -53,7 +54,7 @@ public class ProfileView extends AppCompatActivity {
         setTitle("Home: " + username);
 
         //ToolBar setup
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar3);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
@@ -61,7 +62,7 @@ public class ProfileView extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         dbHandler = new MyDBHandler(this,null, null,1);
-        FloatingActionButton mFab = (FloatingActionButton) findViewById(R.id.btnFloat);
+        FloatingActionButton mFab = (FloatingActionButton) findViewById(R.id.btnFloat2);
 
         fm = new FileManager(getBaseContext());
 
@@ -75,11 +76,11 @@ public class ProfileView extends AppCompatActivity {
         thread.run();
         initialiseListView();
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout2);
 
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view2);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -151,7 +152,6 @@ public class ProfileView extends AppCompatActivity {
                             adapter.add(entry);
                             diag.cancel();
                             setDefaultText();
-                            adapter.notifyDataSetChanged();
                             Toast.makeText(ProfileView.this,"Addition successful",Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(ProfileView.this,"Please fill all fields",Toast.LENGTH_SHORT).show();
@@ -169,97 +169,20 @@ public class ProfileView extends AppCompatActivity {
     }
 
     public void initialiseListView(){
-        view = (ListView) findViewById(R.id.Entries);
-        adapter = new CustomAdapter(ProfileView.this, myList);
+        view = (RecyclerView) findViewById(R.id.recyclerList);
+        adapter = new ProfileAdapter(ProfileView.this, myList, this);
         view.setAdapter(adapter);
+        view.setLayoutManager(new LinearLayoutManager(this));
         setDefaultText();
     }
 
     public void setDefaultText(){
-        TextView text = (TextView) findViewById(R.id.lblEmpty);
+        TextView text = (TextView) findViewById(R.id.lblEmpty2);
         if (myList.size() > 0){
             text.setVisibility(View.GONE);
         } else {
             text.setVisibility(View.VISIBLE);
         }
-    }
-
-    public void deleteEntry(final View v){
-
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        //Yes button clicked
-                        final Entry e = (Entry) v.getTag();
-                        Log.i("DELETE: ", "view id: " + e.get_id());
-                        adapter.remove(e); //--make sure the correct id is given
-                        setDefaultText();
-
-
-                        dbHandler.deleteEntry(e.get_id(), username);
-                        Log.i("DELETE: " , "" + 0);
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        //No button clicked
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure, you wish to delete?").setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener).show();
-    }
-
-    public void editEntry(final View v){
-        final Entry e = (Entry) v.getTag();
-        AlertDialog.Builder mBuiler = new AlertDialog.Builder(ProfileView.this);
-        View mView = getLayoutInflater().inflate(R.layout.dialog_edit_item, null);
-        final EditText editApp = (EditText) mView.findViewById(R.id.txtEditAppName);
-        final EditText editPass = (EditText) mView.findViewById(R.id.txtEditPassword);
-        final EditText editUser = (EditText) mView.findViewById(R.id.txtEditUsername);
-        final Button save = (Button) mView.findViewById(R.id.btnEditSave);
-
-        editApp.setText(e.get_applicationName());
-        editPass.setText(e.get_appPassword());
-        editUser.setText(e.get_appUsername());
-
-        mBuiler.setView(mView);
-        final AlertDialog diag = mBuiler.create();
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String appname, user, pass;
-                appname = editApp.getText().toString();
-                user = editUser.getText().toString();
-                pass = editPass.getText().toString();
-                if ( !appname.trim().equals("") && !user.trim().equals("")&& !pass.trim().equals("")){
-                    final Entry entry = e;
-                    entry.set_applicationName(appname);
-                    entry.set_appPassword(pass);
-                    entry.set_appUsername(user);
-
-                   //update entry in the database;
-                    dbHandler.updateEntry(entry, username);
-
-                    //update the list of entries
-                    adapter.updateEntry(entry);
-                    diag.cancel();
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(ProfileView.this,"Change saved",Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(ProfileView.this,"Please fill all fields",Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-        });
-
-            diag.show();
     }
 
     /**
@@ -296,7 +219,7 @@ public class ProfileView extends AppCompatActivity {
             // Instead, a URI to that document will be contained in the return intent
             // provided to this method as a parameter.
             // Pull that URI using resultData.getData().
-             Uri intentUri = null;
+            Uri intentUri = null;
             if (resultData != null) {
                 intentUri = resultData.getData();
 
@@ -402,7 +325,6 @@ public class ProfileView extends AppCompatActivity {
 
         }
 
-        adapter.notifyDataSetChanged();
         setDefaultText();
         Toast.makeText(ProfileView.this,"Reading Files Completed",Toast.LENGTH_SHORT).show();
         return true;
@@ -417,6 +339,4 @@ public class ProfileView extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

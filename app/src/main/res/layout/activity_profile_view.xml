@@ -2,7 +2,7 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/drawer_layout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -18,19 +18,24 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbar3"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:background="?attr/colorPrimary" />
 
         <FrameLayout
-            android:id="@+id/content_frame"
+            android:id="@+id/content_frame2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/btnFloat"
+                android:id="@+id/btnFloat2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
@@ -44,17 +49,8 @@
                 app:srcCompat="@drawable/ic_add_white_24dp"
                 android:focusable="true" />
 
-            <ListView
-                android:id="@+id/Entries"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginVertical="5dp"
-                android:background="@drawable/background_color"
-                android:dividerHeight="5.0sp" />
-
             <TextView
-                android:id="@+id/lblEmpty"
+                android:id="@+id/lblEmpty2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -66,7 +62,7 @@
 
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
     <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
+        android:id="@+id/nav_view2"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
