@@ -32,6 +32,14 @@ public class GeneratorView extends AppCompatActivity {
     private EditText txtPhrase;
     private TextView lblTest;
 
+    private final String CHAR_STATE = "characterProgressBar";
+    private final String CAP_STATE = "capitalProgressBar";
+    private final String LOWER_STATE = "lowercaseProgressBar";
+    private final String SYMBOL_STATE = "symbolProgreessBar";
+    private final String NUMBER_STATE = "numberProgressBar";
+    private final String TEXT_PHRASE_STATE = "inputtextbox";
+    private final String TEXT_RESULT_STATE = "textResult";
+
 
 
     @Override
@@ -101,6 +109,29 @@ public class GeneratorView extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //save the progress
+        outState.putInt(CHAR_STATE, barChars.getProgress());
+        outState.putInt(CAP_STATE, barCaps.getProgress());
+        outState.putInt(LOWER_STATE, barLower.getProgress());
+        outState.putInt(SYMBOL_STATE, barSymbols.getProgress());
+        outState.putInt(NUMBER_STATE, barNumbers.getProgress());
+        outState.putString(TEXT_PHRASE_STATE, txtPhrase.getText().toString());
+        outState.putString(TEXT_RESULT_STATE, lblTest.getText().toString());
+
+        //saves the view heirarchy
+        super.onSaveInstanceState(outState);
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore state members from saved instance
+        restoreState(savedInstanceState);
+    }
+
     private void initWidgets(){
         swtchChars = (Switch) findViewById(R.id.swtch_chars);
         swtchCaps = (Switch) findViewById(R.id.swtch_caps);
@@ -132,5 +163,15 @@ public class GeneratorView extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void restoreState(Bundle savedInstanceState){
+        barChars.setProgress(savedInstanceState.getInt(CHAR_STATE));
+        barCaps.setProgress(savedInstanceState.getInt(CAP_STATE));
+        barLower.setProgress(savedInstanceState.getInt(LOWER_STATE));
+        barSymbols.setProgress(savedInstanceState.getInt(SYMBOL_STATE));
+        barNumbers.setProgress(savedInstanceState.getInt(NUMBER_STATE));
+        txtPhrase.setText(savedInstanceState.getString(TEXT_PHRASE_STATE));
+        lblTest.setText(savedInstanceState.getString(TEXT_RESULT_STATE));
     }
 }

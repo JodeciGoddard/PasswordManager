@@ -1,6 +1,8 @@
 package com.example.jodeci.passwordmanager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +25,8 @@ public class LoginScreen extends AppCompatActivity {
     EditText password;
     TextView errText;
 
+    private final String NAME_SATE = "savedUsername";
+
     MyDBHandler dbHandler;
 
     @Override
@@ -35,6 +39,8 @@ public class LoginScreen extends AppCompatActivity {
         newUser = (FloatingActionButton) findViewById(R.id.btnRegister);
         login = (Button) findViewById(R.id.btnLogin);
         errText = (TextView) findViewById(R.id.lgErr);
+
+        restorUsername();
 
         dbHandler = new MyDBHandler(this,null, null,1);
 
@@ -68,6 +74,18 @@ public class LoginScreen extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void restorUsername() {
+       username.setText(Preferences.getLastUsername(this));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        //save username
+        Preferences.saveLastUsername(username.getText().toString(), this);
     }
 
     //make sure username meets requirements

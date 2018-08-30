@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="TextView"
+                    android:text="@string/textview"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="TextView"
+                    android:text="@string/textview"
                     android:textColor="@color/white"
                     android:textIsSelectable="true"
                     android:textSize="18sp" />
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="TextView"
+                    android:text="@string/textview"
                     android:textColor="@color/white"
                     android:textIsSelectable="true"
                     android:textSize="18sp" />
@@ -89,7 +89,6 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/transparent"
-                android:onClick="editEntry"
                 android:src="@drawable/edit_button_states"
                 app:layout_anchor="@+id/linearLayout"
                 app:layout_anchorGravity="right|bottom"

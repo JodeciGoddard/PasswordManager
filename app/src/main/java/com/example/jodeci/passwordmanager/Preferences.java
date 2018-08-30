@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 public class Preferences {
     private static String PACKAGE_NAME = "com.example.jodeci.passwordmanager.";
     private static String KEY_ID = "KEY_ID";
+    private static String USER_ID = "USER_ID";
 
     public static void incremnetID(String username, Context context){
         SharedPreferences pref = context.getSharedPreferences(PACKAGE_NAME+"username", Context.MODE_PRIVATE);
@@ -17,7 +18,7 @@ public class Preferences {
         int val = pref.getInt(KEY_ID,0);
         val++;
         editor.putInt(KEY_ID,val);
-        editor.commit();
+        editor.apply();
     }
 
     public static int getNewID(String username, Context context){
@@ -25,5 +26,17 @@ public class Preferences {
         int val = pref.getInt(KEY_ID,0);
         val++;
         return val;
+    }
+
+    public static void saveLastUsername(String username, Context context){
+        SharedPreferences pref = context.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(USER_ID, username);
+        editor.commit();
+    }
+
+    public static String getLastUsername(Context context){
+        SharedPreferences pref = context.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
+        return pref.getString(USER_ID, "");
     }
 }
