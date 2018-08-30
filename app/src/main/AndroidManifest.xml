@@ -26,6 +26,10 @@
             android:label="@string/title_register" />
         <activity android:name=".GeneratorView" />
         <activity android:name=".ProfileView"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
