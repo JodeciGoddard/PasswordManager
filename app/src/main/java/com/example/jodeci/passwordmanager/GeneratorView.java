@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -21,11 +22,11 @@ public class GeneratorView extends AppCompatActivity {
     private Switch swtchSymbols;
     private Switch swtchNumbers;
 
-    private SeekBar barChars;
-    private SeekBar barCaps;
-    private SeekBar barLower;
-    private SeekBar barSymbols;
-    private SeekBar barNumbers;
+    private NumberPicker npChars;
+    private NumberPicker npCaps;
+    private NumberPicker npLower;
+    private NumberPicker npSymbols;
+    private NumberPicker npNumbers;
 
     private Button btnGenerate;
 
@@ -68,31 +69,31 @@ public class GeneratorView extends AppCompatActivity {
                 String phrase;
 
                 if(swtchChars.isChecked()){
-                    chars = barChars.getProgress();
+                    chars = npChars.getValue();
                 } else {
                     chars = -1;
                 }
 
                 if(swtchCaps.isChecked()){
-                    caps = barCaps.getProgress();
+                    caps = npCaps.getValue();
                 } else {
                     caps = -1;
                 }
 
                 if(swtchLower.isChecked()){
-                    lower = barLower.getProgress();
+                    lower = npLower.getValue();
                 } else {
                     lower = -1;
                 }
 
                 if(swtchSymbols.isChecked()){
-                    symbols = barSymbols.getProgress();
+                    symbols = npSymbols.getValue();
                 } else {
                     symbols = -1;
                 }
 
                 if(swtchNumbers.isChecked()){
-                    numbers = barNumbers.getProgress();
+                    numbers = npNumbers.getValue();
                 } else {
                     numbers = -1;
                 }
@@ -112,11 +113,11 @@ public class GeneratorView extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //save the progress
-        outState.putInt(CHAR_STATE, barChars.getProgress());
-        outState.putInt(CAP_STATE, barCaps.getProgress());
-        outState.putInt(LOWER_STATE, barLower.getProgress());
-        outState.putInt(SYMBOL_STATE, barSymbols.getProgress());
-        outState.putInt(NUMBER_STATE, barNumbers.getProgress());
+        outState.putInt(CHAR_STATE, npChars.getValue());
+        outState.putInt(CAP_STATE, npCaps.getValue());
+        outState.putInt(LOWER_STATE, npLower.getValue());
+        outState.putInt(SYMBOL_STATE, npSymbols.getValue());
+        outState.putInt(NUMBER_STATE, npNumbers.getValue());
         outState.putString(TEXT_PHRASE_STATE, txtPhrase.getText().toString());
         outState.putString(TEXT_RESULT_STATE, lblTest.getText().toString());
 
@@ -138,39 +139,43 @@ public class GeneratorView extends AppCompatActivity {
         swtchLower = (Switch) findViewById(R.id.swtch_lower);
         swtchSymbols = (Switch) findViewById(R.id.swtch_symbols);
         swtchNumbers = (Switch) findViewById(R.id.swtch_numbers);
-        barChars = (SeekBar) findViewById(R.id.bar_chars);
-        barCaps = (SeekBar) findViewById(R.id.bar_caps);
-        barLower = (SeekBar) findViewById(R.id.bar_lower);
-        barSymbols = (SeekBar) findViewById(R.id.bar_symbols);
-        barNumbers = (SeekBar) findViewById(R.id.bar_numbers);
+        npChars = (NumberPicker) findViewById(R.id.np_char);
+        npCaps = (NumberPicker) findViewById(R.id.np_cap);
+        npLower = (NumberPicker) findViewById(R.id.np_lower);
+        npSymbols = (NumberPicker) findViewById(R.id.np_symbol);
+        npNumbers = (NumberPicker) findViewById(R.id.np_num);
 
-        setSwitchListener(swtchChars, barChars);
-        setSwitchListener(swtchCaps, barCaps);
-        setSwitchListener(swtchLower, barLower);
-        setSwitchListener(swtchSymbols, barSymbols);
-        setSwitchListener(swtchNumbers , barNumbers);
+        setSwitchListener(swtchChars, npChars);
+        setSwitchListener(swtchCaps, npCaps);
+        setSwitchListener(swtchLower, npLower);
+        setSwitchListener(swtchSymbols, npSymbols);
+        setSwitchListener(swtchNumbers , npNumbers);
     }
 
-    private void setSwitchListener(Switch swtch, final SeekBar sbar ){
+    private void setSwitchListener(Switch swtch, final NumberPicker np ){
+        //setup number pickker values
+        np.setMinValue(0);
+        np.setMaxValue(15);
+
         swtch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    sbar.setEnabled(true);
+                    np.setEnabled(true);
                 }
                 if (!isChecked){
-                    sbar.setEnabled(false);
+                    np.setEnabled(false);
                 }
             }
         });
     }
 
     private void restoreState(Bundle savedInstanceState){
-        barChars.setProgress(savedInstanceState.getInt(CHAR_STATE));
-        barCaps.setProgress(savedInstanceState.getInt(CAP_STATE));
-        barLower.setProgress(savedInstanceState.getInt(LOWER_STATE));
-        barSymbols.setProgress(savedInstanceState.getInt(SYMBOL_STATE));
-        barNumbers.setProgress(savedInstanceState.getInt(NUMBER_STATE));
+        npChars.setValue(savedInstanceState.getInt(CHAR_STATE));
+        npCaps.setValue(savedInstanceState.getInt(CAP_STATE));
+        npLower.setValue(savedInstanceState.getInt(LOWER_STATE));
+        npSymbols.setValue(savedInstanceState.getInt(SYMBOL_STATE));
+        npNumbers.setValue(savedInstanceState.getInt(NUMBER_STATE));
         txtPhrase.setText(savedInstanceState.getString(TEXT_PHRASE_STATE));
         lblTest.setText(savedInstanceState.getString(TEXT_RESULT_STATE));
     }
