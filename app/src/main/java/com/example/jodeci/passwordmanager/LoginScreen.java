@@ -1,5 +1,6 @@
 package com.example.jodeci.passwordmanager;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PersistableBundle;
@@ -11,6 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.jodeci.passwordmanager.database.DataBaseHandler;
+import com.example.jodeci.passwordmanager.database.DataViewModel;
+import com.example.jodeci.passwordmanager.database.User;
 
 import static android.widget.Toast.makeText;
 
@@ -27,7 +32,9 @@ public class LoginScreen extends AppCompatActivity {
 
     private final String NAME_SATE = "savedUsername";
 
-    MyDBHandler dbHandler;
+    //MyDBHandler dbHandler;
+    DataViewModel mViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,28 +47,37 @@ public class LoginScreen extends AppCompatActivity {
         login = (Button) findViewById(R.id.btnLogin);
         errText = (TextView) findViewById(R.id.lgErr);
 
+        mViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+
         restorUsername();
 
-        dbHandler = new MyDBHandler(this,null, null,1);
+        //first time user
+        if(mViewModel.getUser() == null){
+            Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
+            startActivity(intent);
+        }
 
-        newUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
-                startActivity(intent);
-            }
-        });
+        //dbHandler = new MyDBHandler(this,null, null,1);
+
+//        newUser.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
+//                startActivity(intent);
+//            }
+//        });
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if(validateUsername()){
-                    Users user = new Users(username.getText().toString(),password.getText().toString());
-                    if (user.get_password().equals( dbHandler.getUserPassword(user) )){
+                    User user = mViewModel.getUser();
+                    String unfileterPasswword = password.getText().toString();
+                    if (unfileterPasswword.equals( user.password )){
                         //Correct Password
                         Intent intent = new Intent(LoginScreen.this, ProfileView.class);
-                        intent.putExtra("username",user.get_username());
+                        intent.putExtra("username",user.username);
                         startActivity(intent);
                         errText.setText("");
                     } else {

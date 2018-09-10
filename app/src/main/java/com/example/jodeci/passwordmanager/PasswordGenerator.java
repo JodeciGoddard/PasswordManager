@@ -84,6 +84,17 @@ public class PasswordGenerator {
         //Allocate Extra chars
         if (passwordLen > total){
             int extra = passwordLen - total;
+            int revised_extra;
+
+            //no extra chars is the phrase is long
+            if (includePhrase.length() > 0){
+                revised_extra = extra - (includePhrase.length() - 1);
+                if (revised_extra <= 0) revised_extra = 0;
+                int overflow = extra - revised_extra;
+                extra = revised_extra;
+                passwordLen = passwordLen - overflow;
+            }
+
             while (extra > 0){
                 if(extra > 0){
                     numberofLower++;

@@ -68,7 +68,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    //add row to entries
     public long addEntry(Entry entry, String tablename){
         long rowid;
         ContentValues values = new ContentValues();

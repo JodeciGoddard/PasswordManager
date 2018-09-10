@@ -84,7 +84,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toEndOf="@+id/swtch_chars"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="8dp" />
 
             <Switch
                 android:id="@+id/swtch_numbers"
@@ -119,7 +120,8 @@
                 android:thumbTint="@color/colorPrimary"
                 android:trackTint="@color/floatingColor"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="8dp" />
 
             <Switch
                 android:id="@+id/swtch_caps"
@@ -182,7 +184,8 @@
                 android:textColor="@android:color/black"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/swtch_numbers" />
+                app:layout_constraintTop_toBottomOf="@+id/swtch_numbers"
+                android:layout_marginLeft="8dp" />
 
             <NumberPicker
                 android:id="@+id/np_cap"
@@ -228,6 +231,92 @@
                 app:layout_constraintEnd_toStartOf="@+id/np_symbol"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/swtch_caps" />
+
+            <TextView
+                android:id="@+id/lblNumChar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Default"
+                android:textColor="@color/Disabled"
+                android:textSize="24sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/np_char"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/np_char"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/lblNumCaps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Default"
+                android:textColor="@color/Disabled"
+                android:textSize="24sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/np_cap"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/np_cap"
+                app:layout_constraintTop_toTopOf="@+id/np_cap" />
+
+            <TextView
+                android:id="@+id/lblNumSymbols"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Default"
+                android:textColor="@color/Disabled"
+                android:textSize="24sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/np_symbol"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/np_symbol"
+                app:layout_constraintTop_toBottomOf="@+id/np_cap" />
+
+            <TextView
+                android:id="@+id/lblNumLower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Default"
+                android:textColor="@color/Disabled"
+                android:textSize="24sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/np_lower"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/np_lower"
+                app:layout_constraintTop_toBottomOf="@+id/np_symbol" />
+
+            <TextView
+                android:id="@+id/lblNumNumbers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Default"
+                android:textColor="@color/Disabled"
+                android:textSize="24sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/np_num"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/np_num"
+                app:layout_constraintTop_toBottomOf="@+id/np_lower" />
+
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 

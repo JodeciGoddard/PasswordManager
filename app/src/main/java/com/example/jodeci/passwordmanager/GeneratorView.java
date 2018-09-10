@@ -14,6 +14,8 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 public class GeneratorView extends AppCompatActivity {
 
     private Switch swtchChars;
@@ -27,6 +29,12 @@ public class GeneratorView extends AppCompatActivity {
     private NumberPicker npLower;
     private NumberPicker npSymbols;
     private NumberPicker npNumbers;
+
+    private TextView lblnumChars;
+    private TextView lblnumCaps;
+    private TextView lblnumLower;
+    private TextView lblnumSymbols;
+    private TextView lblNumbers;
 
     private Button btnGenerate;
 
@@ -55,6 +63,7 @@ public class GeneratorView extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setDisplayShowHomeEnabled(true);
 
         btnGenerate = (Button) findViewById(R.id.btnGenerate);
 
@@ -111,6 +120,12 @@ public class GeneratorView extends AppCompatActivity {
     }
 
     @Override
+    public boolean onSupportNavigateUp(){
+        onBackPressed();
+        return true;
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         //save the progress
         outState.putInt(CHAR_STATE, npChars.getValue());
@@ -139,20 +154,27 @@ public class GeneratorView extends AppCompatActivity {
         swtchLower = (Switch) findViewById(R.id.swtch_lower);
         swtchSymbols = (Switch) findViewById(R.id.swtch_symbols);
         swtchNumbers = (Switch) findViewById(R.id.swtch_numbers);
+
         npChars = (NumberPicker) findViewById(R.id.np_char);
         npCaps = (NumberPicker) findViewById(R.id.np_cap);
         npLower = (NumberPicker) findViewById(R.id.np_lower);
         npSymbols = (NumberPicker) findViewById(R.id.np_symbol);
         npNumbers = (NumberPicker) findViewById(R.id.np_num);
 
-        setSwitchListener(swtchChars, npChars);
-        setSwitchListener(swtchCaps, npCaps);
-        setSwitchListener(swtchLower, npLower);
-        setSwitchListener(swtchSymbols, npSymbols);
-        setSwitchListener(swtchNumbers , npNumbers);
+        lblnumChars = (TextView) findViewById(R.id.lblNumChar);
+        lblnumCaps = (TextView) findViewById(R.id.lblNumCaps);
+        lblnumLower = (TextView) findViewById(R.id.lblNumLower);
+        lblnumSymbols = (TextView) findViewById(R.id.lblNumSymbols);
+        lblNumbers = (TextView) findViewById(R.id.lblNumNumbers);
+
+        setSwitchListener(swtchChars, npChars, lblnumChars);
+        setSwitchListener(swtchCaps, npCaps, lblnumCaps);
+        setSwitchListener(swtchLower, npLower, lblnumLower);
+        setSwitchListener(swtchSymbols, npSymbols, lblnumSymbols);
+        setSwitchListener(swtchNumbers , npNumbers, lblNumbers);
     }
 
-    private void setSwitchListener(Switch swtch, final NumberPicker np ){
+    private void setSwitchListener(Switch swtch, final NumberPicker np, final TextView txt ){
         //setup number pickker values
         np.setMinValue(0);
         np.setMaxValue(15);
@@ -162,9 +184,11 @@ public class GeneratorView extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     np.setEnabled(true);
+                    txt.setVisibility(View.INVISIBLE);
                 }
                 if (!isChecked){
                     np.setEnabled(false);
+                    txt.setVisibility(View.VISIBLE);
                 }
             }
         });

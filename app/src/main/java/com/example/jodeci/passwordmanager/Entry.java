@@ -1,7 +1,7 @@
 package com.example.jodeci.passwordmanager;
 
 /**
- * Created by jodec on 10/11/2017.
+ * Created by jodeci on 10/11/2017.
  */
 
 public class Entry {

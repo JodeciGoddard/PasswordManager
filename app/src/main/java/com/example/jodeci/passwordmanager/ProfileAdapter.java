@@ -15,52 +15,29 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jodeci.passwordmanager.database.DataViewModel;
+import com.example.jodeci.passwordmanager.database.Items;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jodeci on 8/29/2018.
  */
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
-    private ArrayList<Entry> entries;
+    //private ArrayList<Entry> entries;
     private Context context;
     private ProfileView profile;
+    private DataViewModel mViewModel;
 
-    public void remove(int id) {
-        int index = 0;
-        for (Entry p : entries) {
-            if(p.get_id() == id ){
-                entries.remove(p);
-                break;
-            }
-            index++;
-        }
-        notifyItemRemoved(index);
-    }
+    private List<Items> mItems;
 
-    public void updateEntry(Entry e){
-        int index = 0;
-        for (Entry p : entries) {
-            if(p.get_id() == e.get_id() ){
-                p.set_applicationName(e.get_applicationName());
-                p.set_appUsername(e.get_appUsername());
-                p.set_appPassword(e.get_appPassword());
-                break;
-            }
-            index++;
-        }
-        notifyItemChanged(index);
-    }
-
-    public void add(Entry e){
-        entries.add(e);
-        notifyItemInserted(entries.size() - 1);
-    }
-
-    public ProfileAdapter(Context context, ArrayList<Entry> entries, ProfileView profile){
-        this.entries = entries;
+    public ProfileAdapter(Context context, ProfileView profile, DataViewModel model){
         this.context = context;
         this.profile = profile;
+        this.mViewModel = model;
+        mItems = model.getAllitems();
     }
 
     @NonNull
@@ -71,23 +48,33 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ProfileAdapter.ViewHolder holder, int position) {
-        holder.entry = entries.get(position);
-        holder.appname.setText( entries.get(position).get_applicationName() );
-        holder.user.setText( entries.get(position).get_appUsername() );
-        holder.pass.setText( entries.get(position).get_appPassword() );
-        holder.id = entries.get(position).get_id();
 
-        setDeleteButtonListener(holder.deleteEntry, holder.entry);
-        setEditButtonListener(holder.editEntry,holder.entry);
+        if(mItems != null){
+            holder.appname.setText( mItems.get(position).appname );
+            holder.user.setText( mItems.get(position).username);
+            holder.pass.setText( mItems.get(position).password);
+            holder.id = mItems.get(position).id;
+
+            setDeleteButtonListener(holder.deleteEntry, mItems.get(position));
+            setEditButtonListener(holder.editEntry, mItems.get(position));
+        }
 
     }
 
     @Override
     public int getItemCount() {
-        return entries.size();
+        if (mItems != null)
+            return mItems.size();
+        else return 0;
     }
 
-    public void setDeleteButtonListener(ImageButton b, final Entry e){
+    public void setItems(List<Items> items){
+        mItems = items;
+        profile.setDefaultText();
+        notifyDataSetChanged();
+    }
+
+    public void setDeleteButtonListener(ImageButton b, final Items i){
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,14 +84,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                //Yes button clicked
-                                Log.i("DELETE: ", "view id: " + e.get_id());
-                                remove(e.get_id()); //--make sure the correct id is given
+
+                                removeItemFromList(i);
                                 profile.setDefaultText();
 
-
-                                profile.dbHandler.deleteEntry(e.get_id(), profile.username);
-                                Log.i("DELETE: " , "" + 0);
+                                Log.i("DELETE: " , "" + i.id);
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -123,7 +107,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     }
 
-    public void setEditButtonListener(ImageButton b, final Entry e){
+    public void setEditButtonListener(ImageButton b, final Items i){
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,9 +119,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 final EditText editUser = (EditText) mView.findViewById(R.id.txtEditUsername);
                 final Button save = (Button) mView.findViewById(R.id.btnEditSave);
 
-                editApp.setText(e.get_applicationName());
-                editPass.setText(e.get_appPassword());
-                editUser.setText(e.get_appUsername());
+                editApp.setText(i.appname);
+                editPass.setText(i.password);
+                editUser.setText(i.username);
 
                 mBuiler.setView(mView);
                 final AlertDialog diag = mBuiler.create();
@@ -150,16 +134,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                         user = editUser.getText().toString();
                         pass = editPass.getText().toString();
                         if ( !appname.trim().equals("") && !user.trim().equals("")&& !pass.trim().equals("")){
-                            final Entry entry = e;
-                            entry.set_applicationName(appname);
-                            entry.set_appPassword(pass);
-                            entry.set_appUsername(user);
+                            i.appname = appname;
+                            i.password = pass;
+                            i.username = user;
 
-                            //update entry in the database;
-                            profile.dbHandler.updateEntry(entry, profile.username);
+                            //update item in datatbase
+                            mViewModel.updateItem(i);
+                            notifyItemChanged(getItemPosition(i));
 
-                            //update the list of entries
-                            updateEntry(entry);
                             diag.cancel();
                             Toast.makeText(context,"Change saved",Toast.LENGTH_SHORT).show();
                         } else {
@@ -178,11 +160,36 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     }
 
+    public List<Items> getList() {
+        return mItems;
+    }
+
+    public void insert(Items item) {
+        mItems.add(item);
+        notifyItemInserted(mItems.size() - 1);
+    }
+
+    private void removeItemFromList(Items i){
+        mViewModel.deleteByItemID(i.id);
+
+        int position = getItemPosition(i);
+        mItems.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    private int getItemPosition(Items myitem){
+        for (int i = 0; i < mItems.size(); i++){
+            int compare = mItems.get(i).id;
+            if(myitem.id == compare){
+                return i;
+            }
+        }
+        return  -1;
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView appname, user, pass;
         private ImageButton deleteEntry, editEntry;
-        public Entry entry;
         private int id;
 
         public ViewHolder(View itemView) {

@@ -1,5 +1,6 @@
 package com.example.jodeci.passwordmanager;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.jodeci.passwordmanager.database.DataViewModel;
+import com.example.jodeci.passwordmanager.database.User;
 
 public class RegisterScreen extends AppCompatActivity {
 
@@ -20,14 +24,18 @@ public class RegisterScreen extends AppCompatActivity {
     private boolean validUsername = false;
     private boolean validPassword = false;
 
-    private  MyDBHandler dbHandler;
+    private DataViewModel mViewModel;
+
+    //private  MyDBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_screen);
 
-        dbHandler = new MyDBHandler(this,null, null,1);
+        mViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+
+       // dbHandler = new MyDBHandler(this,null, null,1);
 
         username = (EditText) findViewById(R.id.txtNewUser);
         password = (EditText) findViewById(R.id.txtNewPass);
@@ -44,14 +52,14 @@ public class RegisterScreen extends AppCompatActivity {
 
                 if (validUsername && validPassword) {
 
-                    Users user = new Users(username.getText().toString(), password.getText().toString());
+                    User user = new User(username.getText().toString(), password.getText().toString());
 
-                    if (!dbHandler.containsUser(user)) {
-                        dbHandler.addUser(user);
+                        if (mViewModel.getUser() == null) {
+                        mViewModel.insert(user);
                         Toast.makeText(RegisterScreen.this,"User added successfully.",Toast.LENGTH_SHORT).show();
                         finish();
                     } else{
-                        errText.setText("User already exists");
+                        errText.setText("Can only have one user");
                     }
 
                 }

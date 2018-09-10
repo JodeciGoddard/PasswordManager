@@ -2,12 +2,15 @@ package com.example.jodeci.passwordmanager;
 
 import android.Manifest;
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -29,18 +32,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jodeci.passwordmanager.database.DataViewModel;
+import com.example.jodeci.passwordmanager.database.Items;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileView extends AppCompatActivity {
 
     public String username;
-    public  MyDBHandler dbHandler;
     private RecyclerView view;
     private ProfileAdapter adapter;
-    private ArrayList<Entry> myList;
     private DrawerLayout mDrawerLayout;
     private FileManager fm;
+    FloatingActionButton mFab;
+
+    private DataViewModel mViewModel;
 
     private static final int READ_REQUEST_CODE = 42;
     private static final  int WRITE_PERMISSION_REQ_CODE = 112;
@@ -51,6 +59,7 @@ public class ProfileView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_view);
         Bundle loginData = getIntent().getExtras();
+        mViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
         username = loginData.getString("username");
         setTitle("Home: " + username);
 
@@ -62,23 +71,13 @@ public class ProfileView extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        dbHandler = new MyDBHandler(this,null, null,1);
-        FloatingActionButton mFab = (FloatingActionButton) findViewById(R.id.btnFloat2);
-
+        mFab = findViewById(R.id.btnFloat2);
         fm = new FileManager(getBaseContext());
 
-        //get entries
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                myList = dbHandler.getEntries(username);
-            }
-        });
-        thread.run();
         initialiseListView();
+        setupFloatingButton();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout2);
-
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view2);
@@ -92,23 +91,24 @@ public class ProfileView extends AppCompatActivity {
 
                             try {
                                 requestAppPermissions();
-                                String data = convertEntriestoFileFormat(myList);
+                                String data = convertEntriestoFileFormat(adapter.getList());
                                 fm.write(data, "data.txt");
-                                Toast.makeText(ProfileView.this,"File Export successful",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileView.this, "File Export successful", Toast.LENGTH_SHORT).show();
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
 
                             //Log.i("Profile: ", "Menu item import selected");
-                        } else if(menuItem.getItemId() == R.id.nav_import){
+                        } else if (menuItem.getItemId() == R.id.nav_import) {
                             performFileSearch();
 
-                        } else if (menuItem.getItemId() == R.id.nav_passwordGen){
+                        } else if (menuItem.getItemId() == R.id.nav_passwordGen) {
                             Intent intent = new Intent(ProfileView.this, GeneratorView.class);
                             startActivity(intent);
+                        } else if (menuItem.getItemId() == R.id.nav_exit) {
+                            finish();
                         }
 
-                        //Log.i("Profile: ", "Something was tapped");
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
@@ -119,6 +119,12 @@ public class ProfileView extends AppCompatActivity {
                     }
                 });
 
+
+    }
+
+
+
+    private void setupFloatingButton(){
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,17 +146,11 @@ public class ProfileView extends AppCompatActivity {
                         user = newUser.getText().toString();
                         pass = newPass.getText().toString();
                         if ( !appname.trim().equals("") && !user.trim().equals("")&& !pass.trim().equals("")){
-                            final Entry entry = new Entry(appname,user, pass);
+                            final Items item = new Items(appname,user, pass, username);
 
-                            // int id = Preferences.getNewID(username, ProfileView.this);
-                            // Preferences.incremnetID(username, ProfileView.this);
+                            mViewModel.insert(item);
+                            adapter.insert(item);
 
-                            long id = dbHandler.addEntry(entry, username);
-                            dbHandler.printdblogEntries(username);
-
-                            entry.set_id((int) id);
-
-                            adapter.add(entry);
                             diag.cancel();
                             setDefaultText();
                             Toast.makeText(ProfileView.this,"Addition successful",Toast.LENGTH_SHORT).show();
@@ -170,16 +170,16 @@ public class ProfileView extends AppCompatActivity {
     }
 
     public void initialiseListView(){
-        view = (RecyclerView) findViewById(R.id.recyclerList);
-        adapter = new ProfileAdapter(ProfileView.this, myList, this);
+        view = findViewById(R.id.recyclerList);
+        adapter = new ProfileAdapter(ProfileView.this,  this, mViewModel);
         view.setAdapter(adapter);
         view.setLayoutManager(new LinearLayoutManager(this));
         setDefaultText();
     }
 
     public void setDefaultText(){
-        TextView text = (TextView) findViewById(R.id.lblEmpty2);
-        if (myList.size() > 0){
+        TextView text = findViewById(R.id.lblEmpty2);
+        if (adapter.getItemCount()  > 0){
             text.setVisibility(View.GONE);
         } else {
             text.setVisibility(View.VISIBLE);
@@ -229,18 +229,12 @@ public class ProfileView extends AppCompatActivity {
                 result = fm.read(intentUri);
 
                 if(result == null){
-                    Toast toast = Toast.makeText(getBaseContext(),"File Read failed", Toast.LENGTH_LONG);
+                     Toast.makeText(getBaseContext(),"File Read failed", Toast.LENGTH_LONG).show();
                     Log.i("Read/Write: " , "Result is null");
                 } else {
-                    Toast toast = Toast.makeText(getBaseContext(),"Reading Files", Toast.LENGTH_SHORT);
+                    Toast.makeText(getBaseContext(),"Reading Files", Toast.LENGTH_SHORT).show();
                     Log.i("Read/Write: " , result);
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            addImportsToDatabase(result);
-                        }
-                    });
-                    thread.run();
+                    addImportsToDatabase(result);
                 }
             }
         }
@@ -272,18 +266,18 @@ public class ProfileView extends AppCompatActivity {
     }
 
     //Converts entries to string format to save in a file
-    private String convertEntriestoFileFormat(ArrayList<Entry> list){
+    private String convertEntriestoFileFormat(List<Items> list){
         String data = "";
 
         String header = username + "." + list.size() + ".";
 
         data = data + header + "\n";
 
-        for (Entry e : list){
+        for (Items e : list){
             data = data + "{\n";
-            data = data + "" + e.getUncleanAppName() + "\n";
-            data = data + "" + e.getUncleanUsername() + "\n";
-            data = data + "" + e.getUncleanPass() + "\n";
+            data = data + "" + e.appname + "\n";
+            data = data + "" + e.username + "\n";
+            data = data + "" + e.password + "\n";
             data = data + "}\n";
         }
 
@@ -317,11 +311,9 @@ public class ProfileView extends AppCompatActivity {
 
             //check for close braket
             if(lines[i].equals("}")){
-                Entry e = new Entry(appname,appuser,appPass);
-                long id = dbHandler.addEntry(e, username);
-                e.set_id((int) id);
-                adapter.add(e);
-                continue;
+                Items item = new Items(appname,appuser,appPass,username);
+                mViewModel.insert(item);
+                adapter.insert(item);
             }
 
         }

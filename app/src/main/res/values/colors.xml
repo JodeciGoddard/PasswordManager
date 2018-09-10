@@ -5,4 +5,5 @@
     <color name="colorAccent">#ff4081</color>
     <color name="white">#f2eded</color>
     <color name="floatingColor">#419b96</color>
+    <color name="Disabled">#858787</color>
 </resources>
