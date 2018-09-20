@@ -31,5 +31,8 @@ public interface ItemDAO {
     @Query("SELECT * from item_table where _id = :id")
     Items getItembID(int id);
 
+    @Query("select * from item_table where Iprofile = :profile ")
+    List<Items> getItemsWithProfile(String profile);
+
 
 }

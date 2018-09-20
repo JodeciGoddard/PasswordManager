@@ -1,16 +1,19 @@
-package com.example.jodeci.passwordmanager;
+package com.example.jodeci.passwordmanager.Launch;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jodeci.passwordmanager.Util.Preferences;
+import com.example.jodeci.passwordmanager.R;
 import com.example.jodeci.passwordmanager.database.DataViewModel;
+import com.example.jodeci.passwordmanager.database.Profiles;
 import com.example.jodeci.passwordmanager.database.User;
 
 public class RegisterScreen extends AppCompatActivity {
@@ -26,8 +29,6 @@ public class RegisterScreen extends AppCompatActivity {
 
     private DataViewModel mViewModel;
 
-    //private  MyDBHandler dbHandler;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +36,6 @@ public class RegisterScreen extends AppCompatActivity {
 
         mViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
 
-       // dbHandler = new MyDBHandler(this,null, null,1);
 
         username = (EditText) findViewById(R.id.txtNewUser);
         password = (EditText) findViewById(R.id.txtNewPass);
@@ -53,9 +53,14 @@ public class RegisterScreen extends AppCompatActivity {
                 if (validUsername && validPassword) {
 
                     User user = new User(username.getText().toString(), password.getText().toString());
+                    Profiles profile = new Profiles("Default", Color.GRAY);
 
                         if (mViewModel.getUser() == null) {
                         mViewModel.insert(user);
+                        int id = (int) mViewModel.insert(profile);
+                        profile.id = id;
+                        Preferences.saveCurrentProfile(profile, RegisterScreen.this);
+
                         Toast.makeText(RegisterScreen.this,"User added successfully.",Toast.LENGTH_SHORT).show();
                         finish();
                     } else{

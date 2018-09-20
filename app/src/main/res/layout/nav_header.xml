@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="192dp"
     android:background="@drawable/auxheaderi"
-    android:gravity="bottom|right"
+
     android:orientation="vertical"
     android:padding="16dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    tools:layout_editor_absoluteY="25dp">
+
+    <Button
+        android:id="@+id/btnNavProfile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/circle_shape"
+        android:text="D"
+        android:textColor="#fff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        android:id="@+id/txtNavProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/cantarell"
-        android:text="@string/lock_amp_key"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="ProfileName"
         android:textColor="@color/white"
-        android:textColorHighlight="@android:color/transparent"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btnNavProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.062"
+        app:layout_constraintStart_toEndOf="@+id/btnNavProfile"
+        app:layout_constraintTop_toTopOf="@+id/btnNavProfile" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

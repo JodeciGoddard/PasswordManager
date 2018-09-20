@@ -11,10 +11,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginScreen">
+        <activity android:name=".Launch.LoginScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,14 +22,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterScreen"
+            android:name=".Launch.RegisterScreen"
             android:label="@string/title_register" />
-        <activity android:name=".GeneratorView" />
-        <activity android:name=".ProfileView"></activity>
+        <activity android:name=".Generator.GeneratorView" />
+        <activity android:name=".Home.HomeView" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".Profile.AddProfileView"></activity>
     </application>
 
 </manifest>

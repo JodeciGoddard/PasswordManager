@@ -6,4 +6,5 @@
     <color name="white">#f2eded</color>
     <color name="floatingColor">#419b96</color>
     <color name="Disabled">#858787</color>
+    <color name="default_profile">#b7b7b7</color>
 </resources>

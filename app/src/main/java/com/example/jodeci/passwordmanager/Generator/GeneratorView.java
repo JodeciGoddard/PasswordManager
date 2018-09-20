@@ -1,4 +1,4 @@
-package com.example.jodeci.passwordmanager;
+package com.example.jodeci.passwordmanager.Generator;
 
 import android.graphics.Color;
 import android.support.v7.app.ActionBar;
@@ -10,11 +10,11 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.example.jodeci.passwordmanager.Generator.PasswordGenerator;
+import com.example.jodeci.passwordmanager.R;
 
 public class GeneratorView extends AppCompatActivity {
 
@@ -60,6 +60,7 @@ public class GeneratorView extends AppCompatActivity {
         //ToolBar setup
         Toolbar toolbar = (Toolbar) findViewById(R.id.generator_toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle("Password Generator");
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);

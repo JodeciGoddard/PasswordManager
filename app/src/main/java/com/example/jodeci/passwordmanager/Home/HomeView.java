@@ -1,16 +1,14 @@
-package com.example.jodeci.passwordmanager;
+package com.example.jodeci.passwordmanager.Home;
 
 import android.Manifest;
 import android.app.Activity;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -27,30 +25,45 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jodeci.passwordmanager.Profile.AddProfileView;
+import com.example.jodeci.passwordmanager.Generator.GeneratorView;
+import com.example.jodeci.passwordmanager.R;
+import com.example.jodeci.passwordmanager.Util.Entry;
+import com.example.jodeci.passwordmanager.Util.FileManager;
+import com.example.jodeci.passwordmanager.Util.Preferences;
 import com.example.jodeci.passwordmanager.database.DataViewModel;
 import com.example.jodeci.passwordmanager.database.Items;
+import com.example.jodeci.passwordmanager.database.Profiles;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileView extends AppCompatActivity {
+public class HomeView extends AppCompatActivity {
 
-    public String username;
+    private int currentProfileID;
+    private Profiles currentProfile;
+    private String username;
+    private List<String> profileList;
     private RecyclerView view;
-    private ProfileAdapter adapter;
+    private HomeAdapter adapter;
     private DrawerLayout mDrawerLayout;
     private FileManager fm;
-    FloatingActionButton mFab;
+    private FloatingActionButton mFab;
+    private NavigationView navigationView;
+    private Button profileButton;
+    private TextView profileText;
 
     private DataViewModel mViewModel;
 
     private static final int READ_REQUEST_CODE = 42;
+    private static final int ADD_PROFILE_REQ = 23;
     private static final  int WRITE_PERMISSION_REQ_CODE = 112;
 
 
@@ -58,10 +71,11 @@ public class ProfileView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_view);
-        Bundle loginData = getIntent().getExtras();
         mViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
-        username = loginData.getString("username");
-        setTitle("Home: " + username);
+        username = mViewModel.getUser().username;
+        currentProfileID = Preferences.getCurrentProfileID(this);
+        currentProfile = mViewModel.getProfileByID(currentProfileID);
+        setTitle("Home");
 
         //ToolBar setup
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar3);
@@ -74,15 +88,78 @@ public class ProfileView extends AppCompatActivity {
         mFab = findViewById(R.id.btnFloat2);
         fm = new FileManager(getBaseContext());
 
+        mDrawerLayout = findViewById(R.id.drawer_layout2);
+        navigationView = findViewById(R.id.nav_view2);
+
+
         initialiseListView();
         setupFloatingButton();
+        setupNavigationView();
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout2);
+    }
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view2);
+
+    private void setupFloatingButton(){
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mBuiler = new AlertDialog.Builder(HomeView.this);
+                View mView = getLayoutInflater().inflate(R.layout.dialog_application_input, null);
+                final EditText newApp = (EditText) mView.findViewById(R.id.txtAppName);
+                final EditText newPass = (EditText) mView.findViewById(R.id.txtAppPass);
+                final EditText newUser = (EditText) mView.findViewById(R.id.txtAppUser);
+                final Spinner spnProfile = mView.findViewById(R.id.spnProfile);
+                final Button add = (Button) mView.findViewById(R.id.btnAddApp);
+
+                mBuiler.setView(mView);
+                final AlertDialog diag = mBuiler.create();
+
+                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(HomeView.this, android.R.layout.simple_spinner_item, profileList);
+                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spnProfile.setAdapter(spinnerAdapter);
+
+                add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String appname, user, pass, profile;
+                        appname = newApp.getText().toString();
+                        user = newUser.getText().toString();
+                        pass = newPass.getText().toString();
+                        profile = spnProfile.getSelectedItem().toString();
+
+                        if ( !appname.trim().equals("") && !user.trim().equals("")&& !pass.trim().equals("")){
+                            final Items item = new Items(appname,user, pass, profile);
+
+                            mViewModel.insert(item);
+                            adapter.insert(item);
+
+                            diag.cancel();
+                            setDefaultText();
+                            Toast.makeText(HomeView.this,"Addition successful",Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(HomeView.this,"Please fill all fields",Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
+                });
+
+
+
+                diag.show();
+
+            }
+        });
+    }
+
+    private void setupNavigationView(){
+
+        setProfile();
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
+
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         // set item as selected to persist highlight
@@ -93,7 +170,7 @@ public class ProfileView extends AppCompatActivity {
                                 requestAppPermissions();
                                 String data = convertEntriestoFileFormat(adapter.getList());
                                 fm.write(data, "data.txt");
-                                Toast.makeText(ProfileView.this, "File Export successful", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(HomeView.this, "File Export successful", Toast.LENGTH_SHORT).show();
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
@@ -103,8 +180,11 @@ public class ProfileView extends AppCompatActivity {
                             performFileSearch();
 
                         } else if (menuItem.getItemId() == R.id.nav_passwordGen) {
-                            Intent intent = new Intent(ProfileView.this, GeneratorView.class);
+                            Intent intent = new Intent(HomeView.this, GeneratorView.class);
                             startActivity(intent);
+                        }else if(menuItem.getItemId() == R.id.nav_add_profile){
+                            Intent intent =  new Intent(HomeView.this, AddProfileView.class);
+                            startActivityForResult(intent, ADD_PROFILE_REQ);
                         } else if (menuItem.getItemId() == R.id.nav_exit) {
                             finish();
                         }
@@ -119,62 +199,15 @@ public class ProfileView extends AppCompatActivity {
                     }
                 });
 
-
-    }
-
-
-
-    private void setupFloatingButton(){
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder mBuiler = new AlertDialog.Builder(ProfileView.this);
-                View mView = getLayoutInflater().inflate(R.layout.dialog_application_input, null);
-                final EditText newApp = (EditText) mView.findViewById(R.id.txtAppName);
-                final EditText newPass = (EditText) mView.findViewById(R.id.txtAppPass);
-                final EditText newUser = (EditText) mView.findViewById(R.id.txtAppUser);
-                final Button add = (Button) mView.findViewById(R.id.btnAddApp);
-
-                mBuiler.setView(mView);
-                final AlertDialog diag = mBuiler.create();
-
-                add.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String appname, user, pass;
-                        appname = newApp.getText().toString();
-                        user = newUser.getText().toString();
-                        pass = newPass.getText().toString();
-                        if ( !appname.trim().equals("") && !user.trim().equals("")&& !pass.trim().equals("")){
-                            final Items item = new Items(appname,user, pass, username);
-
-                            mViewModel.insert(item);
-                            adapter.insert(item);
-
-                            diag.cancel();
-                            setDefaultText();
-                            Toast.makeText(ProfileView.this,"Addition successful",Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(ProfileView.this,"Please fill all fields",Toast.LENGTH_SHORT).show();
-                        }
-
-
-                    }
-                });
-
-
-                diag.show();
-
-            }
-        });
     }
 
     public void initialiseListView(){
         view = findViewById(R.id.recyclerList);
-        adapter = new ProfileAdapter(ProfileView.this,  this, mViewModel);
+        adapter = new HomeAdapter(HomeView.this,  this, mViewModel);
         view.setAdapter(adapter);
         view.setLayoutManager(new LinearLayoutManager(this));
         setDefaultText();
+        profileList = mViewModel.getProfilesAsString();
     }
 
     public void setDefaultText(){
@@ -187,7 +220,7 @@ public class ProfileView extends AppCompatActivity {
     }
 
     /**
-     * Fires an intent to spin up the "file chooser" UI and select an image.
+     * Fires an intent to spin up the "file chooser" UI and select a file.
      */
     public void performFileSearch() {
 
@@ -220,7 +253,7 @@ public class ProfileView extends AppCompatActivity {
             // Instead, a URI to that document will be contained in the return intent
             // provided to this method as a parameter.
             // Pull that URI using resultData.getData().
-            Uri intentUri = null;
+            Uri intentUri;
             if (resultData != null) {
                 intentUri = resultData.getData();
 
@@ -237,6 +270,8 @@ public class ProfileView extends AppCompatActivity {
                     addImportsToDatabase(result);
                 }
             }
+        } else if( requestCode == ADD_PROFILE_REQ ){
+            loadProfileChanges();
         }
     }
 
@@ -291,7 +326,7 @@ public class ProfileView extends AppCompatActivity {
 
         //make sure its a valid data file
         if (!username.equals(firstline[0])){
-            Toast.makeText(ProfileView.this,"Reading Files Failed",Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeView.this,"Reading Files Failed",Toast.LENGTH_SHORT).show();
             return  false;
         }
 
@@ -302,6 +337,7 @@ public class ProfileView extends AppCompatActivity {
         for (int i = 1; i < lines.length; i++){
 
             //check for open bracket
+            //TODO: remove Entry calls to uncleanse
             if (lines[i].equals("{")) {
                 appname = Entry.uncleanseInput(lines[i + 1]) ;
                 appuser = Entry.uncleanseInput(lines[i + 2]) ;
@@ -311,7 +347,7 @@ public class ProfileView extends AppCompatActivity {
 
             //check for close braket
             if(lines[i].equals("}")){
-                Items item = new Items(appname,appuser,appPass,username);
+                Items item = new Items(appname,appuser,appPass,currentProfile.name);
                 mViewModel.insert(item);
                 adapter.insert(item);
             }
@@ -319,7 +355,7 @@ public class ProfileView extends AppCompatActivity {
         }
 
         setDefaultText();
-        Toast.makeText(ProfileView.this,"Reading Files Completed",Toast.LENGTH_SHORT).show();
+        Toast.makeText(HomeView.this,"Reading Files Completed",Toast.LENGTH_SHORT).show();
         return true;
     }
 
@@ -332,4 +368,31 @@ public class ProfileView extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private GradientDrawable createCircle(int col){
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.OVAL);
+        shape.setColor(col);
+        shape.setStroke(2, col);
+        return shape;
+    }
+
+    private void setProfile(){
+        // Set Button color and Profile Text
+        View header = navigationView.getHeaderView(0);
+        profileButton = header.findViewById(R.id.btnNavProfile);
+        profileText = header.findViewById(R.id.txtNavProfile);
+        profileButton.setBackground(createCircle(currentProfile.color));
+        profileButton.setText(currentProfile.firstLetter());
+        profileText.setText(currentProfile.name);
+    }
+
+    public void loadProfileChanges(){
+        currentProfileID = Preferences.getCurrentProfileID(HomeView.this);
+        currentProfile = mViewModel.getProfileByID(currentProfileID);
+        setProfile();
+        profileList = mViewModel.getProfilesAsString();
+        adapter.filterList(currentProfile.name);
+    }
+
 }

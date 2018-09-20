@@ -1,4 +1,4 @@
-package com.example.jodeci.passwordmanager;
+package com.example.jodeci.passwordmanager.Util;
 
 /**
  * Created by jodeci on 10/11/2017.

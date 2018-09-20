@@ -1,4 +1,4 @@
-package com.example.jodeci.passwordmanager;
+package com.example.jodeci.passwordmanager.Home;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,45 +9,49 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jodeci.passwordmanager.R;
 import com.example.jodeci.passwordmanager.database.DataViewModel;
 import com.example.jodeci.passwordmanager.database.Items;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by jodeci on 8/29/2018.
  */
 
-public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     //private ArrayList<Entry> entries;
     private Context context;
-    private ProfileView profile;
+    private HomeView profileView;
     private DataViewModel mViewModel;
 
     private List<Items> mItems;
+    private List<String> mProfileList;
 
-    public ProfileAdapter(Context context, ProfileView profile, DataViewModel model){
+    public HomeAdapter(Context context, HomeView profile, DataViewModel model){
         this.context = context;
-        this.profile = profile;
+        this.profileView = profile;
         this.mViewModel = model;
         mItems = model.getAllitems();
+        mProfileList = mViewModel.getProfilesAsString();
     }
 
     @NonNull
     @Override
-    public ProfileAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HomeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return  new ViewHolder(LayoutInflater.from(context).inflate(R.layout.custom_view_layout,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProfileAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeAdapter.ViewHolder holder, int position) {
 
         if(mItems != null){
             holder.appname.setText( mItems.get(position).appname );
@@ -70,7 +74,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     public void setItems(List<Items> items){
         mItems = items;
-        profile.setDefaultText();
+        profileView.setDefaultText();
         notifyDataSetChanged();
     }
 
@@ -86,7 +90,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                             case DialogInterface.BUTTON_POSITIVE:
 
                                 removeItemFromList(i);
-                                profile.setDefaultText();
+                                profileView.setDefaultText();
 
                                 Log.i("DELETE: " , "" + i.id);
                                 break;
@@ -112,19 +116,26 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder mBuiler = new AlertDialog.Builder(context);
-                View mView = profile.getLayoutInflater().inflate(R.layout.dialog_edit_item, null);
-                final EditText editApp = (EditText) mView.findViewById(R.id.txtEditAppName);
-                final EditText editPass = (EditText) mView.findViewById(R.id.txtEditPassword);
-                final EditText editUser = (EditText) mView.findViewById(R.id.txtEditUsername);
-                final Button save = (Button) mView.findViewById(R.id.btnEditSave);
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
+                View mView = profileView.getLayoutInflater().inflate(R.layout.dialog_edit_item, null);
+                final EditText editApp = mView.findViewById(R.id.txtEditAppName);
+                final EditText editPass = mView.findViewById(R.id.txtEditPassword);
+                final EditText editUser =  mView.findViewById(R.id.txtEditUsername);
+                final Spinner spnProfile = mView.findViewById(R.id.spnEditProfile);
+                final Button save = mView.findViewById(R.id.btnEditSave);
 
                 editApp.setText(i.appname);
                 editPass.setText(i.password);
                 editUser.setText(i.username);
 
-                mBuiler.setView(mView);
-                final AlertDialog diag = mBuiler.create();
+                mBuilder.setView(mView);
+                final AlertDialog diag = mBuilder.create();
+
+                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, mProfileList);
+                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spnProfile.setAdapter(spinnerAdapter);
+                spnProfile.setSelection(spinnerAdapter.getPosition(i.profile));
+
 
                 save.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -137,6 +148,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                             i.appname = appname;
                             i.password = pass;
                             i.username = user;
+                            i.profile = spnProfile.getSelectedItem().toString();
 
                             //update item in datatbase
                             mViewModel.updateItem(i);
@@ -200,5 +212,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             this.deleteEntry = (ImageButton) itemView.findViewById(R.id.btnRubbish);
             this.editEntry = (ImageButton) itemView.findViewById(R.id.btnEdit);
         }
+    }
+
+    public void filterList(String profile){
+        mItems = mViewModel.getItemWithProfile(profile);
+        mProfileList = mViewModel.getProfilesAsString();
+        notifyDataSetChanged();
     }
 }

@@ -5,15 +5,17 @@
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:gravity="center">
+    android:gravity="center"
+    tools:layout_editor_absoluteX="10dp"
+    tools:layout_editor_absoluteY="35dp">
 
     <TextView
         android:id="@+id/lblTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="Add Application"
         android:textSize="24sp"
@@ -27,7 +29,6 @@
         android:id="@+id/txtAppName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
@@ -60,7 +61,6 @@
         android:id="@+id/txtAppPass"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
@@ -68,16 +68,42 @@
         android:ems="10"
         android:hint="Application Password"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddApp"
+        app:layout_constraintBottom_toTopOf="@+id/spnProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtAppUser" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="20dp"
+        android:ems="5"
+        android:text="Profile:"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/spnProfile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spnProfile"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/spnProfile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddApp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/txtAppPass" />
 
     <Button
         android:id="@+id/btnAddApp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
@@ -86,9 +112,6 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAppPass" />
+        app:layout_constraintTop_toBottomOf="@+id/spnProfile" />
 </android.support.constraint.ConstraintLayout>

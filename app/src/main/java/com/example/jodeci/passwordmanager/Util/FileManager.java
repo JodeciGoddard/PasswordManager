@@ -1,4 +1,4 @@
-package com.example.jodeci.passwordmanager;
+package com.example.jodeci.passwordmanager.Util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,7 +26,7 @@ import java.io.InputStreamReader;
 public class FileManager {
     private Context context;
 
-    FileManager(Context context){
+    public FileManager(Context context){
         this.context = context;
     }
 

@@ -28,4 +28,6 @@
     <string name="settings">Settings</string>
     <string name="exit">Exit</string>
     <string name="lock_amp_key"><![CDATA[Lock & Key]]></string>
+    <string name="add_profile">Add Profile</string>
+    <string name="title_activity_add_profile_view">AddProfileView</string>
 </resources>

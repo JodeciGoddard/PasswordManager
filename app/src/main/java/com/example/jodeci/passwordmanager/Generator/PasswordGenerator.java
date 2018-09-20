@@ -1,4 +1,4 @@
-package com.example.jodeci.passwordmanager;
+package com.example.jodeci.passwordmanager.Generator;
 
 
 import java.util.ArrayList;
