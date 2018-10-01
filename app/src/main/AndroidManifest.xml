@@ -31,7 +31,9 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".Profile.AddProfileView"></activity>
+        <activity android:name=".Profile.AddProfileView" />
+        <activity android:name=".Profile.ProfileView" />
+        <activity android:name=".Profile.EditProfile"></activity>
     </application>
 
 </manifest>

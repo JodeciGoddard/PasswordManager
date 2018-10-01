@@ -16,15 +16,15 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/button_states">
+            android:background="@color/colorPrimary">
 
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 android:padding="10dp"
@@ -41,7 +41,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="@string/textview"
-                    android:textColor="@color/white"
+                    android:textColor="@color/TextOnLight"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="@string/textview"
-                    android:textColor="@color/white"
+                    android:textColor="@color/TextOnLight"
                     android:textIsSelectable="true"
                     android:textSize="18sp" />
 
@@ -63,7 +63,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="@string/textview"
-                    android:textColor="@color/white"
+                    android:textColor="@color/TextOnLight"
                     android:textIsSelectable="true"
                     android:textSize="18sp" />
 

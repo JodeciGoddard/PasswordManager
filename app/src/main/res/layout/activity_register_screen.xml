@@ -15,7 +15,7 @@
         android:layout_marginBottom="15dp"
         android:padding="5dp"
         android:text="New User"
-        android:textColor="@color/white"
+        android:textColor="@color/TextOnLight"
         android:textSize="24sp" />
 
     <EditText
@@ -30,8 +30,8 @@
         android:ems="10"
         android:hint="New Username"
         android:inputType="textPersonName"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
+        android:textColor="@color/TextOnLight"
+        android:textColorHint="@color/TextOnLight" />
 
     <EditText
         android:id="@+id/txtNewPass"
@@ -44,11 +44,11 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:ems="10"
+        android:fontFamily="sans-serif"
         android:hint="New Password"
         android:inputType="textPassword"
-        android:fontFamily="sans-serif"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
+        android:textColor="@color/TextOnLight"
+        android:textColorHint="@color/TextOnLight" />
 
     <EditText
         android:id="@+id/txtConfirm"
@@ -61,11 +61,11 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:ems="10"
-        android:hint="Confirm Password"
         android:fontFamily="sans-serif"
+        android:hint="Confirm Password"
         android:inputType="textPassword"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
+        android:textColor="@color/TextOnLight"
+        android:textColorHint="@color/TextOnLight" />
 
     <Button
         android:id="@+id/btnCreate"
@@ -91,7 +91,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="15dp"
         android:textAlignment="center"
-        android:textColor="#FFFF4081"
+        android:textColor="@color/TextOnLight"
         android:textSize="18sp" />
 
 </LinearLayout>

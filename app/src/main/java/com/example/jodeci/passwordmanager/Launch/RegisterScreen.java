@@ -32,7 +32,7 @@ public class RegisterScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register_screen);
+        setContentView(R.layout.activity_register_screen);
 
         mViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
 

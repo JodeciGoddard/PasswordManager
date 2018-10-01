@@ -2,6 +2,7 @@ package com.example.jodeci.passwordmanager.Home;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.example.jodeci.passwordmanager.R;
 import com.example.jodeci.passwordmanager.database.DataViewModel;
 import com.example.jodeci.passwordmanager.database.Items;
+import com.example.jodeci.passwordmanager.database.Profiles;
 
 import java.util.List;
 
@@ -47,7 +49,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @NonNull
     @Override
     public HomeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return  new ViewHolder(LayoutInflater.from(context).inflate(R.layout.custom_view_layout,parent,false));
+        return  new ViewHolder(LayoutInflater.from(context).inflate(R.layout.home_view_item_layout,parent,false));
     }
 
     @Override
@@ -214,8 +216,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         }
     }
 
-    public void filterList(String profile){
-        mItems = mViewModel.getItemWithProfile(profile);
+    public void filterList(Profiles profile){
+        if(profile.name.equals("Default")){
+            mItems = mViewModel.getAllitems();
+        } else{
+            mItems = mViewModel.getItemWithProfile(profile.name);
+        }
         mProfileList = mViewModel.getProfilesAsString();
         notifyDataSetChanged();
     }

@@ -34,10 +34,12 @@ import android.widget.Toast;
 
 import com.example.jodeci.passwordmanager.Profile.AddProfileView;
 import com.example.jodeci.passwordmanager.Generator.GeneratorView;
+import com.example.jodeci.passwordmanager.Profile.ProfileView;
 import com.example.jodeci.passwordmanager.R;
 import com.example.jodeci.passwordmanager.Util.Entry;
 import com.example.jodeci.passwordmanager.Util.FileManager;
 import com.example.jodeci.passwordmanager.Util.Preferences;
+import com.example.jodeci.passwordmanager.Util.Util;
 import com.example.jodeci.passwordmanager.database.DataViewModel;
 import com.example.jodeci.passwordmanager.database.Items;
 import com.example.jodeci.passwordmanager.database.Profiles;
@@ -64,22 +66,23 @@ public class HomeView extends AppCompatActivity {
 
     private static final int READ_REQUEST_CODE = 42;
     private static final int ADD_PROFILE_REQ = 23;
+    private static final int EDIT_PROFILE_REQ = 24;
     private static final  int WRITE_PERMISSION_REQ_CODE = 112;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_view);
+        setContentView(R.layout.activity_home_view);
         mViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
         username = mViewModel.getUser().username;
         currentProfileID = Preferences.getCurrentProfileID(this);
         currentProfile = mViewModel.getProfileByID(currentProfileID);
-        setTitle("Home");
+        setTitle("Showing: All");
 
         //ToolBar setup
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar3);
-        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.TextOnLight));
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
@@ -96,6 +99,9 @@ public class HomeView extends AppCompatActivity {
         setupFloatingButton();
         setupNavigationView();
 
+        //May be some double ups
+        loadProfileChanges();
+
     }
 
 
@@ -105,7 +111,7 @@ public class HomeView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder mBuiler = new AlertDialog.Builder(HomeView.this);
-                View mView = getLayoutInflater().inflate(R.layout.dialog_application_input, null);
+                View mView = getLayoutInflater().inflate(R.layout.dialog_add_item, null);
                 final EditText newApp = (EditText) mView.findViewById(R.id.txtAppName);
                 final EditText newPass = (EditText) mView.findViewById(R.id.txtAppPass);
                 final EditText newUser = (EditText) mView.findViewById(R.id.txtAppUser);
@@ -199,6 +205,14 @@ public class HomeView extends AppCompatActivity {
                     }
                 });
 
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeView.this, ProfileView.class);
+                startActivityForResult(intent, EDIT_PROFILE_REQ);
+            }
+        });
+
     }
 
     public void initialiseListView(){
@@ -270,7 +284,7 @@ public class HomeView extends AppCompatActivity {
                     addImportsToDatabase(result);
                 }
             }
-        } else if( requestCode == ADD_PROFILE_REQ ){
+        } else if( requestCode == ADD_PROFILE_REQ || requestCode == EDIT_PROFILE_REQ ){
             loadProfileChanges();
         }
     }
@@ -369,20 +383,13 @@ public class HomeView extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private GradientDrawable createCircle(int col){
-        GradientDrawable shape = new GradientDrawable();
-        shape.setShape(GradientDrawable.OVAL);
-        shape.setColor(col);
-        shape.setStroke(2, col);
-        return shape;
-    }
 
     private void setProfile(){
         // Set Button color and Profile Text
         View header = navigationView.getHeaderView(0);
         profileButton = header.findViewById(R.id.btnNavProfile);
         profileText = header.findViewById(R.id.txtNavProfile);
-        profileButton.setBackground(createCircle(currentProfile.color));
+        profileButton.setBackground(Util.createCircle(currentProfile.color));
         profileButton.setText(currentProfile.firstLetter());
         profileText.setText(currentProfile.name);
     }
@@ -392,7 +399,14 @@ public class HomeView extends AppCompatActivity {
         currentProfile = mViewModel.getProfileByID(currentProfileID);
         setProfile();
         profileList = mViewModel.getProfilesAsString();
-        adapter.filterList(currentProfile.name);
+        adapter.filterList(currentProfile);
+
+        //Set the title
+        if(currentProfile.name.equals("Default")){
+            setTitle("Showing: All");
+        } else {
+            setTitle("Showing: " + currentProfile.name);
+        }
     }
 
 }

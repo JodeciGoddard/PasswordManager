@@ -59,7 +59,7 @@ public class GeneratorView extends AppCompatActivity {
 
         //ToolBar setup
         Toolbar toolbar = (Toolbar) findViewById(R.id.generator_toolbar);
-        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.TextOnLight));
         toolbar.setTitle("Password Generator");
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();

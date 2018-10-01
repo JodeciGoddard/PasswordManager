@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-<!-- Image display in background in select state -->
-
-<!-- Image display in background in select state -->
-
-<!-- Default state -->
-
-    <item android:state_pressed="true" android:drawable="@drawable/button_pressed" />
-    <item android:state_focused="true" android:drawable="@drawable/button_pressed" />
-    <item android:drawable="@drawable/button_color" />
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_pressed="true" >
+        <shape android:shape="rectangle"  >
+            <corners android:radius="15dp" />
+            <stroke android:width="4dp" android:color="@color/colorPrimaryLight" />
+            <solid android:color="@color/colorPrimaryLight"/>
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape android:shape="rectangle"  >
+            <corners android:radius="15dp" />
+            <stroke android:width="4dp" android:color="@color/TextOnLight" />
+            <solid android:color="@color/TextOnLight"/>
+        </shape>
+    </item>
+    <item >
+        <shape android:shape="rectangle"  >
+            <corners android:radius="15dp" />
+            <stroke android:width="4dp" android:color="@color/TextOnLight" />
+            <solid android:color="@color/TextOnLight"/>
+        </shape>
+    </item>
 </selector>
