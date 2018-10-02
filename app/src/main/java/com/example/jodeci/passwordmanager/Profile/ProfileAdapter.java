@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jodeci.passwordmanager.Home.HomeAdapter;
 import com.example.jodeci.passwordmanager.R;
@@ -88,6 +89,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             return mProfileList.size();
         }
         return 0;
+    }
+
+    public void removeAt(int adapterPosition) {
+        if (activeProfile.id == mProfileList.get(adapterPosition).id){
+            Toast.makeText(context,"Cannot delete Active Profile", Toast.LENGTH_LONG).show();
+            return;
+        }
+        mViewModel.deleteProfile(mProfileList.get(adapterPosition));
+        mProfileList.remove(adapterPosition);
+        notifyItemRemoved(adapterPosition);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
