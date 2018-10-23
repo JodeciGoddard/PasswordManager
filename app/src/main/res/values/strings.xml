@@ -30,4 +30,5 @@
     <string name="lock_amp_key"><![CDATA[Lock & Key]]></string>
     <string name="add_profile">Add Profile</string>
     <string name="title_activity_add_profile_view">AddProfileView</string>
+    <string name="title_activity_finge_print_authentication">FingePrintAuthentication</string>
 </resources>

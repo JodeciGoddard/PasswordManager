@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.jodeci.passwordmanager">
 
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:node="replace" />
@@ -33,7 +34,7 @@
 
         <activity android:name=".Profile.AddProfileView" />
         <activity android:name=".Profile.ProfileView" />
-        <activity android:name=".Profile.EditProfile"></activity>
+        <activity android:name=".Profile.EditProfile" />
     </application>
 
 </manifest>

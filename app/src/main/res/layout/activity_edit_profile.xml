@@ -69,7 +69,7 @@
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:ems="10"
-                android:hint='"Enter Name Here"'
+                android:hint="Enter name here"
                 android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -187,7 +187,7 @@
 
             <Button
                 android:id="@+id/btnEditNewProfileSave"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"

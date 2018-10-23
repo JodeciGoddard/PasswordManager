@@ -13,10 +13,11 @@
             android:id="@+id/nav_passwordGen"
             android:icon="@drawable/ic_menu_passgen"
             android:title="@string/password_generator" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_settings"
-            android:title="@string/settings" />
+
+        <!--<item-->
+            <!--android:id="@+id/nav_settings"-->
+            <!--android:icon="@drawable/ic_menu_settings"-->
+            <!--android:title="@string/settings" />-->
 
         <item
             android:id="@+id/nav_add_profile"

@@ -2,6 +2,7 @@ package com.example.jodeci.passwordmanager.Launch;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jodeci.passwordmanager.Util.FingerPrintHandler;
 import com.example.jodeci.passwordmanager.Util.Preferences;
 import com.example.jodeci.passwordmanager.Home.HomeView;
 import com.example.jodeci.passwordmanager.R;
@@ -21,7 +23,7 @@ import static android.widget.Toast.makeText;
 
 /*Password Manager Application that stores simple Text passwords on your device */
 
-public class LoginScreen extends AppCompatActivity {
+public class LoginScreen extends AppCompatActivity implements FingerPrintHandler.OnAuthenticationSucceededListener,  FingerPrintHandler.OnAuthenticationErrorListener{
 
     Button login;
     EditText username;
@@ -32,6 +34,21 @@ public class LoginScreen extends AppCompatActivity {
 
     DataViewModel mViewModel;
 
+    //Finger Print Code
+    private FingerPrintHandler mFingerprintHandler;
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(mFingerprintHandler.isFingerScannerAvailableAndSet()){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mFingerprintHandler.startListening();
+            }
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +78,7 @@ public class LoginScreen extends AppCompatActivity {
                     User user = mViewModel.getUser();
                     String unfileterPasswword = password.getText().toString();
                     if (unfileterPasswword.equals( user.password )){
-                        //Correct Password
-                        Intent intent = new Intent(LoginScreen.this, HomeView.class);
-                        startActivity(intent);
-                        errText.setText("");
+                        authenticateSuccess();
                     } else {
                         //incorrect password
                         errText.setText("Incorrect Password.");
@@ -75,6 +89,11 @@ public class LoginScreen extends AppCompatActivity {
 
             }
         });
+
+        //init Fingerprint
+        mFingerprintHandler = new FingerPrintHandler(this);
+        mFingerprintHandler.setOnAuthenticationSucceededListener(this);
+        mFingerprintHandler.setOnAuthenticationFailedListener(this);
     }
 
     private void restorUsername() {
@@ -84,10 +103,12 @@ public class LoginScreen extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         //save username
         Preferences.saveLastUsername(username.getText().toString(), this);
+        //free up finger print
+        mFingerprintHandler.stopListening();
     }
+
 
     //make sure username meets requirements
     private boolean validateUsername(){
@@ -106,4 +127,23 @@ public class LoginScreen extends AppCompatActivity {
     }
 
 
+    public void authenticateSuccess() {
+        mFingerprintHandler.stopListening();
+        //Correct Password
+        Intent intent = new Intent(LoginScreen.this, HomeView.class);
+        startActivity(intent);
+        errText.setText("");
+    }
+
+    @Override
+    public void onAuthSucceeded() {
+        authenticateSuccess();
+        Toast.makeText(this,"Access Granted",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAuthFailed() {
+        errText.setText("Auth Failed");
+        Toast.makeText(this,"Access Denied",Toast.LENGTH_SHORT).show();
+    }
 }
